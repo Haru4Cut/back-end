@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class APIController {
     private final APIService apiService;
-    @PostMapping("/diaries/events")
-    public ResponseEntity<?> generateImage(@RequestBody String prompt){
-        return new ResponseEntity<>(apiService.generatePicture(prompt), HttpStatus.OK);
-    }
+//    @PostMapping("/diaries/events")
+//    public ResponseEntity<?> generateImage(@RequestBody String prompt){
+//        return new ResponseEntity<>(apiService.generatePicture(prompt), HttpStatus.OK);
+//    }
 }

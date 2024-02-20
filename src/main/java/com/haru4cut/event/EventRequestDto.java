@@ -9,10 +9,11 @@ public class EventRequestDto {
     int emotion;
     int cutNum;
     List<String> keywords;
-
-    public EventRequestDto(int emotion, int cutNum, List<String> keywords) {
+    int frame;
+    public EventRequestDto(int emotion, int cutNum, List<String> keywords, int frame) {
         this.emotion = emotion;
         this.cutNum = cutNum;
         this.keywords = keywords;
+        this.frame = frame;
     }
 }

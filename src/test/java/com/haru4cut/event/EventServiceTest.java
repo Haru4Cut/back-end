@@ -22,10 +22,10 @@ class EventServiceTest {
     void makeEvent(){
         //given
         List<EventRequestDto> events = Arrays.asList(
-                new EventRequestDto(4, 3, Arrays.asList("아빠랑", "카페에서", "커피를 마셨다")),
-                new EventRequestDto(4, 1, Arrays.asList("친구랑", "집에서", "생일 파티를 했다")),
-                new EventRequestDto(4, 2, Arrays.asList("남자친구랑", "집에서", "보드게임을 했다")),
-                new EventRequestDto(4, 2, Arrays.asList("혼자", "도서관에서", "공부를 했다"))
+                new EventRequestDto(4, 3, Arrays.asList("아빠랑", "카페에서", "커피를 마셨다"), 1),
+                new EventRequestDto(4, 1, Arrays.asList("친구랑", "집에서", "생일 파티를 했다"),1),
+                new EventRequestDto(4, 2, Arrays.asList("남자친구랑", "집에서", "보드게임을 했다"),1),
+                new EventRequestDto(4, 2, Arrays.asList("혼자", "도서관에서", "공부를 했다"),1)
         );
         //when
         List<String> urlList = eventService.getImgLinks(events);

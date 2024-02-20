@@ -3,8 +3,7 @@ package com.haru4cut.event;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import lombok.Getter;
-import org.springframework.context.annotation.Configuration;
+
 
 
 @Entity
@@ -25,4 +24,7 @@ public class Events {
 
     @Column(name = "like")
     private int like;
+
+    @Column(name = "frame")
+    private int frame;
 }

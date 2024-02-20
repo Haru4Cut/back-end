@@ -18,7 +18,7 @@ class APIServiceTest {
         //given
         String prompt = "귀여운 강아지 그려줘 웹툰 느낌으로 !";
         //when
-        String result = apiService.generatePicture(prompt);
+        String result = apiService.generateOnePicture(prompt);
         //then
         assertThat(result).startsWith("https://");
 

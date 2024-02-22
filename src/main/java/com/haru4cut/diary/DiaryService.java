@@ -24,7 +24,7 @@ public class DiaryService {
                 diaryRequestDto.getCutNum()
                         )
         );
-        return diary.getDiaryId();
+        return diary.getId();
     }
 
     public Long updateDiary(Long diaryId, String text){
@@ -35,7 +35,7 @@ public class DiaryService {
         Diary diary = findDiary.get();
         diary.update(text);
         diaryRepository.save(diary);
-        return diary.getDiaryId();
+        return diary.getId();
     }
 
     public void deleteDiary(Long diaryId) {
@@ -44,5 +44,15 @@ public class DiaryService {
             throw new CustomException(ErrorCode.NOT_FOUND);
         }
         diaryRepository.deleteById(diaryId);
+    }
+
+
+    public DiaryResponseDto findDiaryByDiaryId(Long diaryId) {
+        Optional<Diary> findDiary = diaryRepository.findById(diaryId);
+        if(findDiary.isEmpty()){
+            throw new CustomException(ErrorCode.NOT_FOUND);
+        }
+        Diary diary = diaryRepository.findDiaryById(diaryId);
+        return new DiaryResponseDto(diary.getId(), diary.getText(), diary.getImgLinks());
     }
 }

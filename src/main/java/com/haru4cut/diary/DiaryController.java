@@ -19,20 +19,27 @@ public class DiaryController {
     public ResponseEntity<Long> createDiary(@PathVariable Long userId,
                                             @RequestBody DiaryRequestDto diaryRequestDto){
         Long diaryId = diaryService.createDiary(userId,diaryRequestDto);
-        return new ResponseEntity(new DiaryResponseDto(diaryId), HttpStatus.CREATED);
+        return new ResponseEntity(new DiaryResponseDto(diaryId, diaryRequestDto.getText(), diaryRequestDto.getImgLinks()), HttpStatus.CREATED);
     }
 
     @PatchMapping("/diaries/{diaryId}")
-    public ResponseEntity<Long> updateDiary(@PathVariable Long diaryId,
+    public ResponseEntity<DiaryResponseDto> updateDiary(@PathVariable Long diaryId,
                                              @RequestBody DiaryRequestDto diaryRequestDto) {
         Long newDiaryId = diaryService.updateDiary(diaryId, diaryRequestDto.getText());
-        return new ResponseEntity(new DiaryResponseDto(newDiaryId), HttpStatus.OK);
+        DiaryResponseDto diaryResponseDto = diaryService.findDiaryByDiaryId(newDiaryId);
+        return new ResponseEntity<>(diaryResponseDto, HttpStatus.OK);
     }
 
     @DeleteMapping("/diaries/{diaryId}")
     public ResponseEntity<?> deleteDiary(@PathVariable Long diaryId){
         diaryService.deleteDiary(diaryId);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/diaries/{diaryId}")
+    public ResponseEntity<DiaryResponseDto> findDiary(@PathVariable Long diaryId){
+        DiaryResponseDto diaryResponseDto = diaryService.findDiaryByDiaryId(diaryId);
+        return new ResponseEntity<>(diaryResponseDto, HttpStatus.OK);
     }
 
 }

@@ -37,4 +37,12 @@ public class DiaryService {
         diaryRepository.save(diary);
         return diary.getDiaryId();
     }
+
+    public void deleteDiary(Long diaryId) {
+        Optional<Diary> findDiary = diaryRepository.findById(diaryId);
+        if(!findDiary.isPresent()){
+            throw new CustomException(ErrorCode.NOT_FOUND);
+        }
+        diaryRepository.deleteById(diaryId);
+    }
 }

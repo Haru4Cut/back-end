@@ -39,4 +39,8 @@ public class Diary {
         this.imgLinks = imgLinks;
         this.text = text;
     }
+
+    public void update(String text){
+        this.text = text;
+    }
 }

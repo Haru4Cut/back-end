@@ -2,6 +2,8 @@ package com.haru4cut.diary;
 
 import com.haru4cut.domain.user.UserRepository;
 import com.haru4cut.domain.user.Users;
+import com.haru4cut.global.exception.CustomException;
+import com.haru4cut.global.exception.ErrorCode;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +24,17 @@ public class DiaryService {
                 diaryRequestDto.getCutNum()
                         )
         );
+        return diary.getDiaryId();
+    }
+
+    public Long updateDiary(Long diaryId, String text){
+        Optional<Diary> findDiary = diaryRepository.findById(diaryId);
+        if(!findDiary.isPresent()){
+            throw new CustomException(ErrorCode.NOT_FOUND);
+        }
+        Diary diary = findDiary.get();
+        diary.update(text);
+        diaryRepository.save(diary);
         return diary.getDiaryId();
     }
 }

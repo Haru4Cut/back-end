@@ -5,14 +5,19 @@ import com.haru4cut.domain.user.Users;
 import com.haru4cut.global.exception.CustomException;
 import com.haru4cut.global.exception.ErrorCode;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 public class DiaryService {
+    @Autowired
     private DiaryRepository diaryRepository;
+    @Autowired
     private UserRepository userRepository;
 
     public Long createDiary(Long userId, DiaryRequestDto diaryRequestDto) {
@@ -54,5 +59,13 @@ public class DiaryService {
         }
         Diary diary = diaryRepository.findDiaryById(diaryId);
         return new DiaryResponseDto(diary.getId(), diary.getText(), diary.getImgLinks());
+    }
+
+    public List<DiaryResponseDto> findDiariesByUserId(Long userId){
+        Users user = userRepository.findUserById(userId);
+        List<Diary> list = diaryRepository.findDiariesByUsers(user);
+        return list.stream()
+                .map(diary -> new DiaryResponseDto(diary.getId(), diary.getText(),diary.getImgLinks()))
+                .collect(Collectors.toList());
     }
 }

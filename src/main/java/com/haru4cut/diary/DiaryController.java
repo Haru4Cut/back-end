@@ -1,5 +1,6 @@
 package com.haru4cut.diary;
 
+import com.haru4cut.domain.user.Users;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
 
 @Controller
 @Log4j2
@@ -40,6 +44,12 @@ public class DiaryController {
     public ResponseEntity<DiaryResponseDto> findDiary(@PathVariable Long diaryId){
         DiaryResponseDto diaryResponseDto = diaryService.findDiaryByDiaryId(diaryId);
         return new ResponseEntity<>(diaryResponseDto, HttpStatus.OK);
+    }
+
+    @GetMapping("/users/{userId}/diaries")
+    public ResponseEntity<DiaryResponseDto> findDiaries(@PathVariable Long userId){
+        List<DiaryResponseDto> diaryResponseDtoList = diaryService.findDiariesByUserId(userId);
+        return new ResponseEntity(diaryResponseDtoList, HttpStatus.OK);
     }
 
 }

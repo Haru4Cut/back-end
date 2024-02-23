@@ -7,7 +7,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
-class UserRepositoryTest {
+class UsersRepositoryTest {
 
     static final String email = "testEmail";
     static final String password = "testPassword";
@@ -18,41 +18,41 @@ class UserRepositoryTest {
     @Test
     public void testSave() throws Exception {
         //given
-        Users user = new Users(email, password);
+        Users users = new Users(email, password);
 
         //when
-        userRepository.save(user);
+        userRepository.save(users);
 
         //then
-        assertThat(user.getEmail()).isEqualTo(email);
-        assertThat(user.getPassword()).isEqualTo(password);
+        assertThat(users.getEmail()).isEqualTo(email);
+        assertThat(users.getPassword()).isEqualTo(password);
     }
 
     @Test
     public void testFind() throws Exception {
         //given
-        Users user = new Users(email, password);
-        userRepository.save(user);
+        Users users = new Users(email, password);
+        userRepository.save(users);
 
         //when
-        Users userFound = userRepository.findById(1l).get();
+        Users usersFound = userRepository.findById(1l).get();
 
         //then
-        assertThat(userFound).isEqualTo(user);
-        assertThat(userFound.getId()).isEqualTo(1l);
+        assertThat(usersFound).isEqualTo(users);
+        assertThat(usersFound.getId()).isEqualTo(1l);
     }
 
     @Test
     public void testDelete() throws Exception {
         //given
-        Users user = new Users(email, password);
-        userRepository.save(user);
+        Users users = new Users(email, password);
+        userRepository.save(users);
 
         //when
-        userRepository.delete(user);
+        userRepository.delete(users);
 
         //then
-        assertThat(userRepository.findById(user.getId())).isEmpty();
+        assertThat(userRepository.findById(users.getId())).isEmpty();
 
     }
 

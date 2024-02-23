@@ -1,5 +1,7 @@
 package com.haru4cut.domain.user;
 
+import com.haru4cut.domain.oauth2.LoginDto;
+import com.haru4cut.domain.oauth2.LoginService;
 import com.haru4cut.global.exception.CustomException;
 import com.haru4cut.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +14,7 @@ import java.util.Optional;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class UserService {
+public class UserService implements LoginService {
 
     @Autowired
     private final UserRepository userRepository;
@@ -29,9 +31,9 @@ public class UserService {
             throw new CustomException(ErrorCode.DUPLICATE_RESOURCE);
         }
 
-        Users user = userRepository.save(userSignUpRequestDto.toEntity());
+        Users users = userRepository.save(userSignUpRequestDto.toEntity());
 
-        return user.getId();
+        return users.getId();
     }
 
     public void deleteUser(Long userId) {
@@ -46,4 +48,9 @@ public class UserService {
         userRepository.delete(userFound.get());
     }
 
+    // 이메일 기반 로그인은 사용하지 않음
+    @Override
+    public LoginDto signInUser(String authorizationCode) {
+        return null;
+    }
 }

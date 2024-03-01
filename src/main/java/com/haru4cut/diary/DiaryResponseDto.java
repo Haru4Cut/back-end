@@ -11,4 +11,5 @@ public class DiaryResponseDto {
     Long diaryId;
     String text;
     List<String> imgLinks;
+    String date;
 }

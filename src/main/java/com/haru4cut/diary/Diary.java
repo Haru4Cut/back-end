@@ -28,14 +28,15 @@ public class Diary {
     private String text;
 
     @Column(name = "date")
-    private LocalDate date;
+    private String date;
 
     @Column(name = "imgLinks")
     private List<String> imgLinks;
 
-    public Diary(Users users, int cutNum, List<String> imgLinks, String text) {
+    public Diary(Users users, int cutNum, List<String> imgLinks, String text, String date) {
         this.users = users;
         this.cutNum = cutNum;
+        this.date = date;
         this.imgLinks = imgLinks;
         this.text = text;
     }

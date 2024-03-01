@@ -23,7 +23,7 @@ public class DiaryController {
     public ResponseEntity<Long> createDiary(@PathVariable Long userId,
                                             @RequestBody DiaryRequestDto diaryRequestDto){
         Long diaryId = diaryService.createDiary(userId,diaryRequestDto);
-        return new ResponseEntity(new DiaryResponseDto(diaryId, diaryRequestDto.getText(), diaryRequestDto.getImgLinks()), HttpStatus.CREATED);
+        return new ResponseEntity(new DiaryResponseDto(diaryId, diaryRequestDto.getText(), diaryRequestDto.getImgLinks(), diaryRequestDto.getDate()), HttpStatus.CREATED);
     }
 
     @PatchMapping("/diaries/{diaryId}")

@@ -13,9 +13,10 @@ public class DiaryRequestDto {
     int cutNum;
     List<String> imgLinks;
     String text;
+    String date;
 
-    public Diary toEntity(Users users, String text, List<String> imgLinks, int cutNum){
-        return new Diary(users, this.cutNum, this.imgLinks, this.text);
+    public Diary toEntity(Users users, String text, List<String> imgLinks, int cutNum, String date){
+        return new Diary(users, this.cutNum, this.imgLinks, this.text, this.date);
     }
 
 }

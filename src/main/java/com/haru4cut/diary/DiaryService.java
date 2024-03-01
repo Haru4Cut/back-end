@@ -26,7 +26,8 @@ public class DiaryService {
                 users,
                 diaryRequestDto.getText(),
                 diaryRequestDto.getImgLinks(),
-                diaryRequestDto.getCutNum()
+                diaryRequestDto.getCutNum(),
+                diaryRequestDto.getDate()
                         )
         );
         return diary.getId();
@@ -58,14 +59,14 @@ public class DiaryService {
             throw new CustomException(ErrorCode.NOT_FOUND);
         }
         Diary diary = diaryRepository.findDiaryById(diaryId);
-        return new DiaryResponseDto(diary.getId(), diary.getText(), diary.getImgLinks());
+        return new DiaryResponseDto(diary.getId(), diary.getText(), diary.getImgLinks(), diary.getDate());
     }
 
     public List<DiaryResponseDto> findDiariesByUserId(Long userId){
         Users user = userRepository.findUserById(userId);
         List<Diary> list = diaryRepository.findDiariesByUsers(user);
         return list.stream()
-                .map(diary -> new DiaryResponseDto(diary.getId(), diary.getText(),diary.getImgLinks()))
+                .map(diary -> new DiaryResponseDto(diary.getId(), diary.getText(),diary.getImgLinks(), diary.getDate()))
                 .collect(Collectors.toList());
     }
 }

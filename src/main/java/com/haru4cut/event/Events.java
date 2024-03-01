@@ -22,9 +22,6 @@ public class Events {
     @Column(name = "cutNum")
     private int cutNum;
 
-//    @Column(name = "like")
-//    private int like;
-
     @Column(name = "frame")
     private int frame;
 }

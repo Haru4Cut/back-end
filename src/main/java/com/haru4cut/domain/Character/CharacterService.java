@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Slf4j
 @RequiredArgsConstructor
 @Service
@@ -32,6 +34,21 @@ public class CharacterService {
                 .etc(characterRequestDto.getEtc()).build();
 
         return characterRepository.save(character).getId();
+    }
+
+    public CharacterResponseDto editUser(Long characterId, CharacterRequestDto characterRequestDto) {
+
+        Optional<Character> characterOptional = characterRepository.findById(characterId);
+
+        if (characterOptional.isEmpty()) {
+            throw new CustomException(ErrorCode.NOT_FOUND);
+        }
+
+        Character character = characterOptional.get();
+        character.updateCharacterImg(characterRequestDto);
+        characterRepository.save(character);
+
+        return new CharacterResponseDto(character.getUsers().getId(), character.getId(), character.getNickName(), character.getCharacterImg());
     }
 
     @PostConstruct

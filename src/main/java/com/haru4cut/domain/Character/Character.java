@@ -54,8 +54,14 @@ public class Character {
         this.etc = etc;
     }
 
-    public void updateCharacterImg(String characterImg) {
-        this.characterImg = characterImg;
+    public void updateCharacterImg(CharacterRequestDto characterRequestDto) {
+        this.sex = characterRequestDto.getSex();
+        this.age = characterRequestDto.getAge();
+        this.hairColor = characterRequestDto.getHairColor();
+        this.hairLength = characterRequestDto.getHairLength();
+        this.nickName = characterRequestDto.getNickName();
+        this.characterImg = characterRequestDto.getCharacterImage();
+        this.etc = characterRequestDto.getEtc();
     }
 
 }

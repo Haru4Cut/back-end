@@ -51,6 +51,18 @@ public class CharacterService {
         return new CharacterResponseDto(character.getUsers().getId(), character.getId(), character.getNickName(), character.getCharacterImg());
     }
 
+    public CharacterVo findCharacter(Long id) {
+        Optional<Character> characterOptional = characterRepository.findById(id);
+        if (characterOptional.isEmpty()) {
+            throw new CustomException(ErrorCode.NOT_FOUND);
+        }
+
+        Character character = characterOptional.get();
+
+        return new CharacterVo(character.getSex(), character.getAge(), character.getHairColor(), character.getHairLength(), character.getSkinColor()
+                , character.getNickName(), character.getCharacterImg(), character.getEtc());
+    }
+
     @PostConstruct
     public void assingUser() {
         userRepository.save(Users.builder().email("test@test.com").password("test").build());

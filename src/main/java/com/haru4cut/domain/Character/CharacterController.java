@@ -1,6 +1,7 @@
 package com.haru4cut.domain.Character;
 
 import com.haru4cut.global.exception.CustomException;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +28,12 @@ public class CharacterController {
     public ResponseEntity updateCharacter(CharacterRequestDto characterRequestDto, @PathVariable(name = "characterId") Long characterId) {
         CharacterResponseDto characterResponseDto = characterService.editUser(characterId, characterRequestDto);
         return ResponseEntity.ok(characterRequestDto);
+    }
+
+    @GetMapping("/{characterId}")
+    public ResponseEntity getCharacter(@PathVariable(name = "characterId") Long characterId) {
+        CharacterVo characterVo = characterService.findCharacter(characterId);
+        return ResponseEntity.ok(characterVo);
     }
 
     @ExceptionHandler(CustomException.class)

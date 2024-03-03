@@ -23,6 +23,12 @@ public class CharacterController {
         return ResponseEntity.ok(body);
     }
 
+    @PutMapping("/{characterId}")
+    public ResponseEntity updateCharacter(CharacterRequestDto characterRequestDto, @PathVariable(name = "characterId") Long characterId) {
+        CharacterResponseDto characterResponseDto = characterService.editUser(characterId, characterRequestDto);
+        return ResponseEntity.ok(characterRequestDto);
+    }
+
     @ExceptionHandler(CustomException.class)
     public ResponseEntity<String> handleCustomException(CustomException exception) {
         HttpStatus httpStatus = exception.getErrorCode().getHttpStatus();

@@ -2,9 +2,11 @@ package com.haru4cut.event;
 
 import com.haru4cut.domain.user.Users;
 import jakarta.persistence.*;
+import lombok.NoArgsConstructor;
 
 
 @Entity
+@NoArgsConstructor
 public class Events {
 
     @Id

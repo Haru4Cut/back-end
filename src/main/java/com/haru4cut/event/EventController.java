@@ -36,4 +36,5 @@ public class EventController {
         EventResponseDto eventResponseDto = new EventResponseDto(url);
         return new ResponseEntity<>(eventResponseDto, HttpStatus.OK);
     }
+
 }

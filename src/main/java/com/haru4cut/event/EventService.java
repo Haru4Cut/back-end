@@ -20,7 +20,6 @@ import java.util.List;
 @AllArgsConstructor
 public class EventService {
     private List<String> promptList;
-    private List<String> eventsList;
     private final APIService apiService;
     private byte[][] base64;
     private ByteToMultiPartFile byteToMultiPartFile;
@@ -32,6 +31,7 @@ public class EventService {
     private UserRepository userRepository;
 
     public List<String> createEvents(Long userId, List<EventRequestDto> events) throws IOException {
+        List<String> eventsList = new ArrayList<>();
         Users users = userRepository.findById(userId).get();
         byte[][] base64 = getImgB64(events);
         int cutNum = getCutNum(events);

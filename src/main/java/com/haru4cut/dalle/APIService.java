@@ -18,10 +18,11 @@ public class APIService {
                 .size("1024x1792")
                 .model("dall-e-3")
                 .style("vivid")
+                .responseFormat("b64_json")
                 .n(1)
                 .build();
-        String url = openAiService.createImage(createImageRequest).getData().get(0).getUrl();
-        return url;
+        String b64 = openAiService.createImage(createImageRequest).getData().get(0).getB64Json();
+        return b64;
     }
 
     public String generateWidthPicture(String prompt){
@@ -30,10 +31,11 @@ public class APIService {
                 .size("1792x1024")
                 .model("dall-e-3")
                 .style("vivid")
+                .responseFormat("b64_json")
                 .n(1)
                 .build();
-        String url = openAiService.createImage(createImageRequest).getData().get(0).getUrl();
-        return url;
+        String b64 = openAiService.createImage(createImageRequest).getData().get(0).getB64Json();
+        return b64;
     }
 
     public String generateFourPicture(String prompt){
@@ -42,10 +44,11 @@ public class APIService {
                 .size("1024x1024")
                 .model("dall-e-3")
                 .style("vivid")
+                .responseFormat("b64_json")
                 .n(1)
                 .build();
-        String url = openAiService.createImage(createImageRequest).getData().get(0).getUrl();
-        return url;
+        String b64 = openAiService.createImage(createImageRequest).getData().get(0).getB64Json();
+        return b64;
     }
 
 }

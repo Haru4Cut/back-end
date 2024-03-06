@@ -20,7 +20,7 @@ class LikesServiceTest {
         //when
         likesService.createLike(userId, eventId);
         //then
-        Optional<Likes> likes = likesRepository.findLikesFromUsersAndEvents(userId,eventId);
+        Optional<Likes> likes = likesRepository.findByUsersAndEvents(userId,eventId);
         assertThat(likes.isPresent()).isTrue();
     }
 
@@ -33,7 +33,7 @@ class LikesServiceTest {
         //when
         likesService.deleteLike(userId,eventId);
         //then
-        Optional<Likes> likes = likesRepository.findLikesFromUsersAndEvents(userId,eventId);
+        Optional<Likes> likes = likesRepository.findByUsersAndEvents(userId,eventId);
         assertThat(likes.isEmpty()).isTrue();
 
     }

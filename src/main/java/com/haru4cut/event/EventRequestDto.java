@@ -9,11 +9,13 @@ public class EventRequestDto {
     int emotion;
     int cutNum;
     List<String> keywords;
-    int frame;
-    public EventRequestDto(int emotion, int cutNum, List<String> keywords, int frame) {
+    String date;
+    int orderNum;
+    public EventRequestDto(int emotion, int cutNum, List<String> keywords, String date, int orderNum) {
         this.emotion = emotion;
         this.cutNum = cutNum;
         this.keywords = keywords;
-        this.frame = frame;
+        this.date = date;
+        this.orderNum = orderNum;
     }
 }

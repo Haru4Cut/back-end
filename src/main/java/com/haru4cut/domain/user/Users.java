@@ -2,6 +2,7 @@ package com.haru4cut.domain.user;
 
 import com.haru4cut.diary.Diary;
 import com.haru4cut.domain.oauth2.SocialType;
+import com.haru4cut.event.Events;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -39,6 +40,9 @@ public class Users {
 
     @OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
     private List<Diary> diaries = new ArrayList<>();
+
+    @OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
+    private List<Events> events = new ArrayList<>();
 
     @Builder
     public Users(String email, String password, String name, String socialId, SocialType socialType) {

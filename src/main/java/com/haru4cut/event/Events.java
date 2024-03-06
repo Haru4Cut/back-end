@@ -11,6 +11,7 @@ public class Events {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "eventId")
     private Long id;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId")
     private Users users;
@@ -23,9 +24,6 @@ public class Events {
 
     @Column(name = "cutNum")
     private int cutNum;
-
-    @Column(name = "frame")
-    private int frame;
 
     @Column(name = "date")
     private String date;
@@ -40,5 +38,4 @@ public class Events {
         this.users = users;
         this.url = url;
     }
-
 }

@@ -33,6 +33,9 @@ public class Diary {
     @Column(name = "imgLinks")
     private List<String> imgLinks;
 
+    @Column(name = "like_count")
+    private int like;
+
     public Diary(Users users, int cutNum, List<String> imgLinks, String text, String date) {
         this.users = users;
         this.cutNum = cutNum;

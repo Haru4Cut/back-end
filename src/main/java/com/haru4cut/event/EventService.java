@@ -39,8 +39,8 @@ public class EventService {
         for(int i = 0; i < cutNum ; i++) {
             MultipartFile multipartFile = byteToMultiPartFile.changeByte(base64[i], events.get(0).date, events.get(i).orderNum, users.getId());
             url = s3Uploader.saveFile(multipartFile);
-            eventsList.add(url);
-            eventRepository.save(new Events(users, url));
+            Events event = eventRepository.save(new Events(users, url));
+            eventsList.add(event.getId() + " : " + url);
         }
         return eventsList;
     }
@@ -66,7 +66,7 @@ public class EventService {
         byte[][] base64Array = new byte[1][];
         for(int i = 0; i < promptList.size();i++){
             String prompt = promptList.get(i);
-            b64 = apiService.generateOnePicture(prompt);
+            b64 = apiService.generateOnePicture(prompt + "세로로 볼 수 있게");
             base64Array[i] = Base64.decodeBase64(b64);
         }
         return base64Array;
@@ -93,8 +93,6 @@ public class EventService {
         }
         return base64Array;
     }
-
-
 
 
     private List<String> makePrompt(List<EventRequestDto> events) {

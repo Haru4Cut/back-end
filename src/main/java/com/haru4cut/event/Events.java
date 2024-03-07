@@ -2,10 +2,12 @@ package com.haru4cut.event;
 
 import com.haru4cut.domain.user.Users;
 import jakarta.persistence.*;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 
 @Entity
+@Getter
 @NoArgsConstructor
 public class Events {
 
@@ -40,5 +42,6 @@ public class Events {
         this.users = users;
         this.url = url;
     }
+
 }
 

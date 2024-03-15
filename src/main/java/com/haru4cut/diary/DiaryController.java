@@ -52,4 +52,11 @@ public class DiaryController {
         return new ResponseEntity(diaryResponseDtoList, HttpStatus.OK);
     }
 
+    @GetMapping("/users/{userId}/diaryByDate")
+    public ResponseEntity<DiaryResponseDto> findDiaryByDate(@PathVariable Long userId,
+                                                            @RequestBody DiaryRequestDto diaryRequestDto){
+        DiaryResponseDto diaryResponseDto = diaryService.findDiaryByDate(userId, diaryRequestDto.getDate());
+        return new ResponseEntity<>(diaryResponseDto, HttpStatus.OK);
+    }
+
 }

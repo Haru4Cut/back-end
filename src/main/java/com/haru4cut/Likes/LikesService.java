@@ -1,5 +1,7 @@
 package com.haru4cut.Likes;
 
+import com.haru4cut.diary.Diary;
+import com.haru4cut.diary.DiaryResponseDto;
 import com.haru4cut.domain.user.UserRepository;
 import com.haru4cut.domain.user.Users;
 import com.haru4cut.event.EventRepository;
@@ -10,7 +12,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -38,5 +42,17 @@ public class LikesService {
             likesRepository.deleteById(likes.get().id);
         }
     }
+
+    public List<Likes> getLikes(Long userId){
+        Optional<Users> findUsers = userRepository.findById(userId);
+        if(!findUsers.isPresent()){
+            throw new CustomException(ErrorCode.NOT_FOUND);
+        }
+        Users users = userRepository.findUserById(userId);
+        List<Likes> likeList = likesRepository.findByUsers(users);
+        return likeList;
+    }
+
+
 
 }

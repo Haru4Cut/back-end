@@ -69,4 +69,19 @@ public class DiaryService {
                 .map(diary -> new DiaryResponseDto(diary.getId(), diary.getText(),diary.getImgLinks(), diary.getDate()))
                 .collect(Collectors.toList());
     }
+
+    public DiaryResponseDto findDiaryByDate(Long userId, String date){
+        Optional<Users> findUser = userRepository.findById(userId);
+        if (findUser.isEmpty()){
+            throw new CustomException(ErrorCode.NOT_FOUND);
+        }
+        Users users = userRepository.findUserById(findUser.get().getId());
+        Optional<Diary> findDiary = Optional.ofNullable(diaryRepository.findDiaryByUsersAndDate(users, date));
+        if(findDiary.isEmpty()){
+            throw new CustomException(ErrorCode.NOT_FOUND);
+        }
+        Diary diary = diaryRepository.findDiaryByUsersAndDate(users, date);
+        return new DiaryResponseDto(diary.getId(), diary.getText(), diary.getImgLinks(),diary.getDate());
+
+    }
 }

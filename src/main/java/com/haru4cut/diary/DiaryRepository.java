@@ -10,4 +10,5 @@ import java.util.List;
 public interface DiaryRepository extends JpaRepository<Diary, Long> {
     Diary findDiaryById(Long diaryId);
     List<Diary> findDiariesByUsers(Users users);
+    Diary findDiaryByUsersAndDate(Users users, String date);
 }

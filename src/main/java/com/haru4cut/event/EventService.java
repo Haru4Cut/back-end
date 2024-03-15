@@ -5,6 +5,8 @@ import com.haru4cut.S3.S3Uploader;
 import com.haru4cut.dalle.APIService;
 import com.haru4cut.domain.user.UserRepository;
 import com.haru4cut.domain.user.Users;
+import com.haru4cut.global.exception.CustomException;
+import com.haru4cut.global.exception.ErrorCode;
 import lombok.AllArgsConstructor;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -41,9 +44,24 @@ public class EventService {
             url = s3Uploader.saveFile(multipartFile);
             Events event = eventRepository.save(new Events(users, url));
             eventsList.add(event.getId() + " : " + url);
+            System.out.println("이거 확인" + users.getEvents());
         }
         return eventsList;
     }
+
+    private List<Long> getEventsList(Long userId) {
+        Optional<Users> user = userRepository.findById(userId);
+        List<Events> events = user.get().getEvents();
+        if (!user.isPresent()) {
+            throw new CustomException(ErrorCode.NOT_FOUND);
+        }
+        List<Long> eventIds = new ArrayList<>();
+        for (Events event : events) {
+            eventIds.add(event.getId());
+        }
+        return eventIds;
+    }
+
 
     private byte[][] getImgB64(List<EventRequestDto> events) {
         promptList = new ArrayList<>();

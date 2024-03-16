@@ -23,7 +23,7 @@ public class Likes {
     @JoinColumn(name = "userId")
     private Users users;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "eventId")
     private Events events;
 

@@ -12,5 +12,5 @@ import java.util.Optional;
 @Repository
 public interface LikesRepository extends JpaRepository<Likes, Long> {
     Optional<Likes> findByUsersAndEvents(Users users, Events events);
-    List<Likes> findByUsers(Users users);
+    Optional<Likes> findLikesByEvents(Events events);
 }

@@ -36,11 +36,11 @@ public class LikesService {
         Optional<Likes> likes = likesRepository.findByUsersAndEvents(users,events);
         if(!likes.isPresent()){
             likesRepository.save(LikesRequestDto.toEntity(users,events));
-            events.updateLike(events.getCount() + 1L);
+            events.updateLike(1L);
         }
         if(likes.isPresent()) {
             likesRepository.deleteById(likes.get().id);
-            events.updateLike(events.getCount() - 1L);
+            events.updateLike(0L);
         }
         return new LikesResponseDto(events.getCount());
     }

@@ -2,6 +2,7 @@ package com.haru4cut.event;
 
 import com.haru4cut.domain.user.Users;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -22,6 +23,7 @@ public class Events {
     @JoinColumn(name = "userId")
     private Users users;
 
+    @NotNull
     private Long count = 0L;
 
     @Column(name = "keywords")
@@ -48,7 +50,7 @@ public class Events {
     }
 
     public void updateLike(Long count){
-        this.count = count;
+        this.count += count;
     }
 
 }

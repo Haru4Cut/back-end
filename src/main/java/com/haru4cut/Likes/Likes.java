@@ -27,6 +27,8 @@ public class Likes {
     @JoinColumn(name = "eventId")
     private Events events;
 
+
+
     public Likes() {}
 
 

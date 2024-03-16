@@ -22,6 +22,8 @@ public class Events {
     @JoinColumn(name = "userId")
     private Users users;
 
+    private Long count = 0L;
+
     @Column(name = "keywords")
     private String[] keywords;
 
@@ -45,6 +47,9 @@ public class Events {
         this.url = url;
     }
 
+    public void updateLike(Long count){
+        this.count = count;
+    }
 
 }
 

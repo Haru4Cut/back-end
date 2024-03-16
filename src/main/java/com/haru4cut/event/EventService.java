@@ -44,7 +44,6 @@ public class EventService {
             url = s3Uploader.saveFile(multipartFile);
             Events event = eventRepository.save(new Events(users, url));
             eventsList.add(event.getId() + " : " + url);
-            System.out.println("이거 확인" + users.getEvents());
         }
         return eventsList;
     }

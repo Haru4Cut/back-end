@@ -26,8 +26,8 @@ cloud:
       stack.auto: false
     region.static: ap-northeast-2
     credentials:
-      accessKey: ${S3_ACCESS_KEY}
-      secretKey: ${S3_SECRET_KEY}
+      accessKey: ${secrets.S3_ACCESS_KEY}
+      secretKey: ${secrets.S3_SECRET_KEY}
 logging:
   level:
     org.hibernate.SQL: debug

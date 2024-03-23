@@ -35,4 +35,4 @@ logging:
 
 jwt:
   secretKey: ${JWT_SECRET_KEY}
-  expiration: ${EXPIRATION_TIME}
+  expiration: 3600000

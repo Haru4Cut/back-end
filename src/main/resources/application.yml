@@ -27,12 +27,12 @@ cloud:
       stack.auto: false
     region.static: ap-northeast-2
     credentials:
-      accessKey: "${{ secrets.S3_ACCESS_KEY }}"
-      secretKey: "${{ secrets.S3_SECRET_KEY }}"
+      accessKey: ${S3_ACCESS_KEY}
+      secretKey: ${S3_SECRET_KEY}
 logging:
   level:
     org.hibernate.SQL: debug
 
 jwt:
-  secret: "${{ secrets.JWT_SECRET_KEY }}"
-  expiration: "${{ secrets.EXPIRATION_TIME }}"
+  secretKey: ${JWT_SECRET_KEY}
+  expiration: ${EXPIRATION_TIME}

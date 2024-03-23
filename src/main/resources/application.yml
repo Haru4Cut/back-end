@@ -32,3 +32,7 @@ cloud:
 logging:
   level:
     org.hibernate.SQL: debug
+
+jwt:
+  secret: "${{ secrets.JWT_SECRET_KEY }}"
+  expiration: "${{ secrets.EXPIRATION_TIME }}"

@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Table(name = "characters")
 @Entity
-public class Character {
+public class Characters {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,7 +43,7 @@ public class Character {
     private String etc;
 
     @Builder
-    public Character(Users users, Long sex, Long age, Long hairColor, Long hairLength, Long skinColor, String nickName, String characterImg, String etc) {
+    public Characters(Users users, Long sex, Long age, Long hairColor, Long hairLength, Long skinColor, String nickName, String characterImg, String etc) {
         this.users = users;
         this.sex = sex;
         this.age = age;

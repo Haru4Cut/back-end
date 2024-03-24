@@ -28,7 +28,7 @@ public class CharacterService {
             throw new CustomException(ErrorCode.NOT_FOUND);
         }
 
-        Character character = Character.builder().sex(characterRequestDto.getSex()).age(characterRequestDto.getAge()).hairColor(characterRequestDto.getHairColor())
+        Characters character = Characters.builder().sex(characterRequestDto.getSex()).age(characterRequestDto.getAge()).hairColor(characterRequestDto.getHairColor())
                 .hairLength(characterRequestDto.getHairLength()).skinColor(characterRequestDto.getSkinColor())
                 .nickName(characterRequestDto.getNickName()).characterImg(characterRequestDto.getCharacterImage()).users(user)
                 .etc(characterRequestDto.getEtc()).build();
@@ -38,13 +38,13 @@ public class CharacterService {
 
     public CharacterResponseDto editUser(Long characterId, CharacterRequestDto characterRequestDto) {
 
-        Optional<Character> characterOptional = characterRepository.findById(characterId);
+        Optional<Characters> characterOptional = characterRepository.findById(characterId);
 
         if (characterOptional.isEmpty()) {
             throw new CustomException(ErrorCode.NOT_FOUND);
         }
 
-        Character character = characterOptional.get();
+        Characters character = characterOptional.get();
         character.updateCharacterImg(characterRequestDto);
         characterRepository.save(character);
 
@@ -52,12 +52,12 @@ public class CharacterService {
     }
 
     public CharacterVo findCharacter(Long id) {
-        Optional<Character> characterOptional = characterRepository.findById(id);
+        Optional<Characters> characterOptional = characterRepository.findById(id);
         if (characterOptional.isEmpty()) {
             throw new CustomException(ErrorCode.NOT_FOUND);
         }
 
-        Character character = characterOptional.get();
+        Characters character = characterOptional.get();
 
         return new CharacterVo(character.getSex(), character.getAge(), character.getHairColor(), character.getHairLength(), character.getSkinColor()
                 , character.getNickName(), character.getCharacterImg(), character.getEtc());

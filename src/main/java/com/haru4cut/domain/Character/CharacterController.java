@@ -12,6 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @RequestMapping(value = "/character")
 @RequiredArgsConstructor
 @RestController
+@CrossOrigin(origins = "http://localhost:3000")
 public class CharacterController {
 
     private final CharacterService characterService;

@@ -16,7 +16,6 @@ import java.util.List;
 @Controller
 @Log4j2
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:3000")
 public class LikesController {
     private final LikesService likesService;
 

@@ -19,7 +19,6 @@ import java.util.List;
 @Controller
 @AllArgsConstructor
 @Log4j2
-@CrossOrigin(origins = "http://localhost:3000")
 public class EventController {
     @Autowired
     private final EventService eventService;

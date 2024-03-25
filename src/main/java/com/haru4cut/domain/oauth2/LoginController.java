@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
 public class LoginController {
 
     private final OAuth2Service oAuth2Service;

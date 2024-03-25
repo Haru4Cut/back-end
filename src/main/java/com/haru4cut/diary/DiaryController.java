@@ -15,6 +15,7 @@ import java.util.Optional;
 @Controller
 @Log4j2
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:3000")
 public class DiaryController {
     @Autowired
     private final DiaryService diaryService;

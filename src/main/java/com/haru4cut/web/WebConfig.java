@@ -1,4 +1,4 @@
-package com.haru4cut.web.web;
+package com.haru4cut.web;
 
 import com.haru4cut.web.CorsFilter;
 import jakarta.servlet.FilterRegistration;

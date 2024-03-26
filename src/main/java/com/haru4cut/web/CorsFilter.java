@@ -1,6 +1,7 @@
 package com.haru4cut.web;
 
 import jakarta.servlet.*;
+import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.Order;
@@ -11,6 +12,7 @@ import java.io.IOException;
 
 
 @Component
+@WebFilter(urlPatterns = "/*")
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class CorsFilter implements Filter {
     @Override

@@ -12,7 +12,6 @@ import java.io.IOException;
 
 
 @Component
-@WebFilter(urlPatterns = "/*")
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class CorsFilter implements Filter {
     @Override

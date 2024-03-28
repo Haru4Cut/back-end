@@ -17,7 +17,7 @@ public class CharacterController {
     private final CharacterService characterService;
 
     @PostMapping("/{userId}")
-    public ResponseEntity createCharacter(CharacterRequestDto characterRequestDto, @PathVariable(name = "userId") Long userId) {
+    public ResponseEntity createCharacter(@RequestBody CharacterRequestDto characterRequestDto, @PathVariable(name = "userId") Long userId) {
         Long characterId = characterService.saveCharacter(userId, characterRequestDto);
         ConcurrentHashMap<String, Long> body = new ConcurrentHashMap<>();
         body.put("characterId", characterId);
@@ -25,7 +25,7 @@ public class CharacterController {
     }
 
     @PutMapping("/{characterId}")
-    public ResponseEntity updateCharacter(CharacterRequestDto characterRequestDto, @PathVariable(name = "characterId") Long characterId) {
+    public ResponseEntity updateCharacter(@RequestBody CharacterRequestDto characterRequestDto, @PathVariable(name = "characterId") Long characterId) {
         CharacterResponseDto characterResponseDto = characterService.editUser(characterId, characterRequestDto);
         return ResponseEntity.ok(characterRequestDto);
     }

@@ -23,19 +23,24 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         log.info("요청 URI : {}", request.getRequestURI());
 
+        if(request.getMethod().equals("OPTIONS")){
+            return ;
+        }
+
         if (Arrays.stream(REQUEST_PERMITTED).anyMatch(r -> request.getRequestURI().matches(r))) {
             log.info("로그인 요청 시 필터 통과");
             filterChain.doFilter(request, response);
-            return;
+            return ;
         }
 
         String accessToken = request.getHeader("Authorization").split(" ")[1];
 
         if (accessToken == null || accessToken.isBlank() || !jwtTokenProvider.validateToken(accessToken)) {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "인증에 실패하였습니다.");
-            return;
+            return ;
         }
 
         filterChain.doFilter(request, response);
+
     }
 }

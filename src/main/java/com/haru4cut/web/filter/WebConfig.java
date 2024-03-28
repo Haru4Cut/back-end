@@ -7,7 +7,6 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-@EnableWebMvc
 public class WebConfig implements WebMvcConfigurer {
 
     @Override
@@ -15,9 +14,9 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addMapping("/**")
                 .allowedOriginPatterns("http://localhost:3000")
                 .allowedMethods("POST, GET, OPTIONS, DELETE, PUT, PATCH")
-                .allowedHeaders("*")
+                .allowedHeaders("Origin, X-Requested-With, Content-Type, Accept, Authorization")
                 .allowCredentials(true)
-                .maxAge(3600L);
+                .maxAge(86400);
 
     }
 

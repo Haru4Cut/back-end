@@ -23,8 +23,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         log.info("요청 URI : {}", request.getRequestURI());
 
-        if(request.getMethod().equals("OPTIONS")){
-            return ;
+        if("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+            response.setStatus(HttpServletResponse.SC_OK);
         }
 
         if (Arrays.stream(REQUEST_PERMITTED).anyMatch(r -> request.getRequestURI().matches(r))) {

@@ -1,5 +1,6 @@
 package com.haru4cut.diary;
 
+import com.haru4cut.StringListConverter;
 import com.haru4cut.domain.user.Users;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -31,6 +32,7 @@ public class Diary {
     private String date;
 
     @Column(name = "imgLinks")
+    @Convert(converter = StringListConverter.class)
     private List<String> imgLinks;
 
     @Column(name = "like_count")

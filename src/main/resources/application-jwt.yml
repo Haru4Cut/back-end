@@ -1,0 +1,3 @@
+#jwt:
+#  secretKey: "${{ secrets.JWT_SECRET_KEY }}"
+#  expiration: "${{ secrets.EXPIRATION_TIME }}"

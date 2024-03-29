@@ -63,10 +63,4 @@ public class CharacterService {
                 , character.getNickName(), character.getCharacterImg(), character.getEtc());
     }
 
-    @PostConstruct
-    public void assingUser() {
-        userRepository.save(Users.builder().email("test@test.com").password("test").build());
-    }
-
-
 }

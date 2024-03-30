@@ -24,11 +24,14 @@ cloud:
   aws:
     s3:
       bucket: haru4cut
+      bucketName : "haru4cutprofilebucket"
       stack.auto: false
     region.static: ap-northeast-2
     credentials:
       accessKey: ${S3_ACCESS_KEY}
+      accessKeyProfile : ${S3_ACCESS_PROFILE_KEY}
       secretKey: ${S3_SECRET_KEY}
+      secretKeyProfile : ${S3_SECRET_PROFILE_KEY}
 logging:
   level:
     org.hibernate.SQL: debug
@@ -36,3 +39,5 @@ logging:
 jwt:
   secretKey: ${JWT_SECRET_KEY}
   expiration: 3600000
+
+

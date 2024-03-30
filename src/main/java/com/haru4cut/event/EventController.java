@@ -31,7 +31,7 @@ public class EventController {
 
 
     @PostMapping("/diaries/{userId}/events")
-    public ResponseEntity<EventResponseDto> createEvent(@PathVariable Long userId,
+    public ResponseEntity<EventResponseDto> createEvent(@PathVariable(name = "userId") Long userId,
                                                         @RequestBody List<EventRequestDto> events) throws Exception{
         List<String> url = eventService.createEvents(userId, events);
         EventResponseDto eventResponseDto = new EventResponseDto(url);

@@ -63,8 +63,12 @@ public class DiaryService {
     }
 
     public List<DiaryResponseDto> findDiariesByUserId(Long userId){
-        Users user = userRepository.findUserById(userId);
-        List<Diary> list = diaryRepository.findDiariesByUsers(user);
+        Optional<Users> user = userRepository.findById(userId);
+        if(user.isEmpty()){
+            throw new CustomException(ErrorCode.NOT_FOUND);
+        }
+        Users users = userRepository.findUserById(user.get().getId());
+        List<Diary> list = diaryRepository.findDiariesByUsers(users);
         return list.stream()
                 .map(diary -> new DiaryResponseDto(diary.getId(), diary.getText(),diary.getImgLinks(), diary.getDate()))
                 .collect(Collectors.toList());

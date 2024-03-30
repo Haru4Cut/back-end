@@ -1,10 +1,12 @@
 package com.haru4cut.event;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Data
+@NoArgsConstructor
 public class EventRequestDto {
     int emotion;
     int cutNum;

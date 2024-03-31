@@ -13,14 +13,14 @@ public class LoginDto{
 
     private HttpStatus httpStatus;
     private long userId;
-    private String email;
+    private String name;
     private String accessToken;
 
     @Builder
-    public LoginDto(HttpStatus httpStatus, long userId, String email, String accessToken) {
+    public LoginDto(HttpStatus httpStatus, long userId, String name, String accessToken) {
         this.httpStatus = httpStatus;
         this.userId = userId;
-        this.email = email;
+        this.name = name;
         this.accessToken = accessToken;
     }
 }

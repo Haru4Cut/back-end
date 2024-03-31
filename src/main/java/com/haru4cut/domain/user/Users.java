@@ -22,7 +22,7 @@ public class Users {
     @Column(name = "userId")
     private Long id;
 
-    @Column(name = "email", length = 50, unique = true, nullable = false)
+    @Column(name = "email", length = 50, unique = true)
     private String email;
 
     @Transient

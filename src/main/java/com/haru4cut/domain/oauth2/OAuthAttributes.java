@@ -23,10 +23,9 @@ public class OAuthAttributes {
 
     public static OAuthAttributes ofKakao(Map<String, Object> attributes) {
         String oAuthId = String.valueOf(attributes.get("id"));
-        String name = "test";
         Map<String, Object> kakaoAccount = (Map<String, Object>) attributes.get("kakao_account");
         Map<String, Object> profile = (Map<String, Object>) kakaoAccount.get("profile");
-        name = (String) profile.get("nickname");
+        String name = (String) profile.get("nickname");
 
         return OAuthAttributes.builder().oAuthId(oAuthId).attributes(attributes).name(name).socialType(SocialType.KAKAO).build();
     }

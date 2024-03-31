@@ -10,12 +10,12 @@ import lombok.Setter;
 public class LoginSuccessDto {
 
     private long userId;
-    private String email;
+    private String name;
     private String accessToken;
 
-    public LoginSuccessDto(long userId, String email, String accessToken) {
+    public LoginSuccessDto(long userId, String name, String accessToken) {
         this.userId = userId;
-        this.email = email;
+        this.name = name;
         this.accessToken = accessToken;
     }
 }

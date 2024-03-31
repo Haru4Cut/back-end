@@ -24,7 +24,7 @@ public class OAuth2LoginService implements LoginService {
 
         String oAuthId = userInfo.getOAuthId();
         SocialType socialType = userInfo.getSocialType();
-        String email = userInfo.getName();
+        String name = userInfo.getName();
 
         HttpStatus httpStatus = HttpStatus.OK;
         Optional<Users> user = userRepository.findBySocialIdAndSocialType(oAuthId, socialType);
@@ -32,18 +32,18 @@ public class OAuth2LoginService implements LoginService {
 
         // 회원 가입 유저
         if (user.isEmpty()) {
-            userId = createUser(oAuthId, socialType, email);
+            userId = createUser(oAuthId, socialType, name);
             httpStatus = HttpStatus.CREATED;
         }
 
         // 우리 서버의 토큰 생성
         String accessToken = jwtTokenProvider.createAccessToken(userId);
 
-        return LoginDto.builder().accessToken(accessToken).userId(userId).email(email).httpStatus(httpStatus).build();
+        return LoginDto.builder().accessToken(accessToken).userId(userId).name(name).httpStatus(httpStatus).build();
     }
 
 
-    public Long createUser(String socialId, SocialType socialType, String email) {
-        return userRepository.save(Users.builder().socialType(socialType).socialId(socialId).email(email).build()).getId();
+    public Long createUser(String socialId, SocialType socialType, String name) {
+        return userRepository.save(Users.builder().socialType(socialType).socialId(socialId).name(name).build()).getId();
     }
 }

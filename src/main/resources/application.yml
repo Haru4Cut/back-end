@@ -39,5 +39,9 @@ logging:
 jwt:
   secretKey: ${JWT_SECRET_KEY}
   expiration: 3600000
+server:
+  tomcat:
+    connection-timeout: -1
+
 
 

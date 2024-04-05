@@ -34,7 +34,8 @@ public class EventController {
     public ResponseEntity<EventResponseDto> createEvent(@PathVariable(name = "userId") Long userId,
                                                         @RequestBody List<EventRequestDto> events) throws Exception{
         List<String> url = eventService.createEvents(userId, events);
-        EventResponseDto eventResponseDto = new EventResponseDto(url);
+        String date = events.get(0).getDate();
+        EventResponseDto eventResponseDto = new EventResponseDto(url, date);
         return new ResponseEntity<>(eventResponseDto, HttpStatus.OK);
     }
 

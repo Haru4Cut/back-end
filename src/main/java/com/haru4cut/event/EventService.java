@@ -42,7 +42,8 @@ public class EventService {
         for(int i = 0; i < cutNum ; i++) {
             MultipartFile multipartFile = byteToMultiPartFile.changeByte(base64[i], events.get(0).date, events.get(i).orderNum, users.getId());
             url = s3Uploader.saveFile(multipartFile);
-            Events event = eventRepository.save(new Events(users, url));
+            String date = events.get(0).getDate();
+            Events event = eventRepository.save(new Events(users, url,date));
             eventsList.add(event.getId() + " : " + url);
         }
         return eventsList;

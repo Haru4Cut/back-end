@@ -1,7 +1,7 @@
 package com.haru4cut.domain.Character;
 
 import com.haru4cut.global.exception.CustomException;
-import lombok.Getter;
+import com.haru4cut.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,15 +24,27 @@ public class CharacterController {
         return ResponseEntity.ok(body);
     }
 
-    @PutMapping("/{characterId}")
-    public ResponseEntity updateCharacter(@RequestBody CharacterRequestDto characterRequestDto, @PathVariable(name = "characterId") Long characterId) {
-        CharacterResponseDto characterResponseDto = characterService.editUser(characterId, characterRequestDto);
+    @PatchMapping("/{userId}")
+    public ResponseEntity updateCharacter(@RequestBody CharacterRequestDto characterRequestDto, @PathVariable(name = "userId") Long userId) {
+        CharacterResponseDto characterResponseDto = characterService.editCharacter(userId, characterRequestDto);
         return ResponseEntity.ok(characterRequestDto);
     }
 
-    @GetMapping("/{characterId}")
-    public ResponseEntity getCharacter(@PathVariable(name = "characterId") Long characterId) {
-        CharacterVo characterVo = characterService.findCharacter(characterId);
+    @PatchMapping("/{userId}/nickName")
+    public ResponseEntity updateNickname(@PathVariable(name = "userId") Long userId, @RequestBody CharacterNickNameRequestDto CharacterNickNameRequestDto) {
+        String nickName = CharacterNickNameRequestDto.nickName;
+
+        if (nickName.length() <= 0 || nickName.length() >= 6) {
+            return ResponseEntity.badRequest().body("닉네임의 길이는 1~5자까지 가능합니다.");
+        }
+
+        CharacterResponseDto characterResponseDto = characterService.editCharacterName(userId, nickName);
+        return ResponseEntity.ok(characterResponseDto);
+    }
+
+    @GetMapping("/{userId}")
+    public ResponseEntity getCharacter(@PathVariable(name = "userId") Long userId) {
+        CharacterVo characterVo = characterService.findCharacter(userId);
         return ResponseEntity.ok(characterVo);
     }
 

@@ -55,7 +55,7 @@ public class Characters {
         this.etc = etc;
     }
 
-    public void updateCharacterImg(CharacterRequestDto characterRequestDto) {
+    public void updateCharacter(CharacterRequestDto characterRequestDto) {
         this.sex = characterRequestDto.getSex();
         this.age = characterRequestDto.getAge();
         this.hairColor = characterRequestDto.getHairColor();
@@ -63,6 +63,10 @@ public class Characters {
         this.nickName = characterRequestDto.getNickName();
         this.characterImg = characterRequestDto.getCharacterImage();
         this.etc = characterRequestDto.getEtc();
+    }
+
+    public void updateCharacterName(String nickName) {
+        this.nickName = nickName;
     }
 
 }

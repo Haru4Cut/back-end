@@ -17,14 +17,15 @@ import java.io.IOException;
 @Service
 public class ImageService {
 
+    private final ModelClient modelClient;
     private final ProfileService profileService;
     private final CharacterService characterService;
     private final S3ProfileUploader s3ProfileUploader;
-    private String dummyPrompt = "강아지와 산책하는 사람 그려줘";
 
     public String generateProfileImage(ImageRequestDto imageRequestDto, Long userId) {
 
-        byte[] bytes = profileService.generatePicture(dummyPrompt);
+        String prompt = modelClient.requestPrompt(imageRequestDto);
+        byte[] bytes = profileService.generatePicture(prompt);
         MultipartFile multipartFile = changeByteToMultipartFile(bytes, userId);
 
         String imgUri;

@@ -44,6 +44,7 @@ public class Events {
     @Column(name = "orderNum")
     private int orderNum;
 
+
     public Events(Users users, String url, String date) {
         this.users = users;
         this.url = url;

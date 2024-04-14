@@ -33,6 +33,9 @@ public class EventService {
     @Autowired
     private UserRepository userRepository;
 
+    private final EventFlaskService eventFlaskService;
+
+    // S3 링크 받아와서 출력하는 코드
     public List<String> createEvents(Long userId, List<EventRequestDto> events) throws IOException {
         List<String> eventsList = new ArrayList<>();
         Users users = userRepository.findById(userId).get();
@@ -43,27 +46,14 @@ public class EventService {
             MultipartFile multipartFile = byteToMultiPartFile.changeByte(base64[i], events.get(0).date, events.get(i).orderNum, users.getId());
             url = s3Uploader.saveFile(multipartFile);
             String date = events.get(0).getDate();
-            Events event = eventRepository.save(new Events(users, url,date));
+            Events event = eventRepository.save(new Events(users, url, date));
             eventsList.add(event.getId() + " : " + url);
         }
         return eventsList;
     }
 
-    private List<Long> getEventsList(Long userId) {
-        Optional<Users> user = userRepository.findById(userId);
-        List<Events> events = user.get().getEvents();
-        if (!user.isPresent()) {
-            throw new CustomException(ErrorCode.NOT_FOUND);
-        }
-        List<Long> eventIds = new ArrayList<>();
-        for (Events event : events) {
-            eventIds.add(event.getId());
-        }
-        return eventIds;
-    }
-
-
-    private byte[][] getImgB64(List<EventRequestDto> events) {
+    // 각 컷 수 마다 Base64 형태로 그림 받아올 수 있도록 나누어 놓음
+        private byte[][] getImgB64(List<EventRequestDto> events) {
         promptList = new ArrayList<>();
         promptList = makePrompt(events);
         int cutNum = getCutNum(events);
@@ -79,12 +69,32 @@ public class EventService {
         return base64;
     }
 
+    private List<String> makePrompt(List<EventRequestDto> events){
+        List<EventFlaskRequestDto> flaskEvent = new ArrayList<>();
+        for(int i = 0; i < events.size(); i++){
+            int emotionNum = events.get(i).getEmotion();
+            String emotion = Emotions.getEmotion(emotionNum);
+
+            EventFlaskRequestDto eventFlaskRequestDto = new EventFlaskRequestDto(
+                    emotion,
+                    events.get(i).getCutNum(),
+                    events.get(i).getKeywords(),
+                    events.get(i).getDate(),
+                    events.get(i).getOrderNum()
+            );
+
+            flaskEvent.add(eventFlaskRequestDto);
+        }
+        List<String> promptList = eventFlaskService.sendToFlask(flaskEvent);
+        return promptList;
+    }
+
     private byte[][] getOneB64(List<String> promptList){
         String b64 = null;
         byte[][] base64Array = new byte[1][];
         for(int i = 0; i < promptList.size();i++){
             String prompt = promptList.get(i);
-            b64 = apiService.generateOnePicture(prompt + "세로로 볼 수 있게");
+            b64 = apiService.generateOnePicture(prompt);
             base64Array[i] = Base64.decodeBase64(b64);
         }
         return base64Array;
@@ -113,17 +123,6 @@ public class EventService {
     }
 
 
-    private List<String> makePrompt(List<EventRequestDto> events) {
-        for(EventRequestDto event : events){
-            int emotionNum = event.getEmotion();
-            String emotion = Emotions.getEmotion(emotionNum);
-            List<String> keywords = event.getKeywords();
-            String keyword = makeKeyword(keywords);
-            promptList.add(emotion + " " + keyword);
-        }
-        System.out.println(promptList);
-        return promptList;
-    }
 
     private int getCutNum(List<EventRequestDto> events){
         int firstCutNum = events.get(0).getCutNum();
@@ -135,15 +134,6 @@ public class EventService {
         return firstCutNum;
     }
 
-    private String makeKeyword(List<String> keywords){
-        StringBuilder makeString = new StringBuilder();
-        for(String keyword : keywords){
-            makeString.append(keyword);
-            makeString.append(" ");
-            makeString.append("웹툰 느낌으로");
-        }
-        return makeString.toString();
-    }
 
 
 }

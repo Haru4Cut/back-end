@@ -14,7 +14,7 @@ import java.util.List;
 @Service
 @Slf4j
 public class EventFlaskService {
-    static String MODEL_REQUEST_URL = "MODEL_REQUEST_URL";
+    static String MODEL_REQUEST_URL = "http://43.200.188.243:8082/events/makeprompt";
     public List<String> sendToFlask(List<EventFlaskRequestDto> eventFlaskRequestDto) {
 
         RestTemplate restTemplate = new RestTemplate();

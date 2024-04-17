@@ -12,7 +12,7 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class ModelClient {
 
-    static String MODEL_PROFILE_REQUEST_URI = "MODEL_PROFILE_REQUEST_URI";
+    static String MODEL_PROFILE_REQUEST_URI = "http://43.200.188.243:8888/characters/makeprompt";
 
     public String requestPrompt (ImageRequestDto imageRequestDto){
         String result = "";

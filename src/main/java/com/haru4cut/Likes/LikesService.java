@@ -52,7 +52,7 @@ public class LikesService {
         }
         Users users = userRepository.findUserById(userId);
         List<Events> eventsList = eventRepository.findEventsByUsers(users);
-
+        String date = eventsList.get(0).getDate();
         List<String> likesList = new ArrayList<>();
         for(int i = 0; i < eventsList.size(); i++){
             Events events = eventsList.get(i);
@@ -64,7 +64,7 @@ public class LikesService {
                 likesList.add(events.getUrl());
             }
         }
-        return new EventResponseDto(likesList);
+        return new EventResponseDto(likesList, date);
     }
 
 

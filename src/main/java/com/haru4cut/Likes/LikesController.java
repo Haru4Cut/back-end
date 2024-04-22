@@ -28,8 +28,8 @@ public class LikesController {
     }
 
     @GetMapping("likes/{userId}")
-    public ResponseEntity<EventResponseDto> getLikesEvents(@PathVariable Long userId){
-        EventResponseDto eventResponseDto = likesService.getLikes(userId);
+    public ResponseEntity<LikesUsersResponseDto> getLikesEvents(@PathVariable Long userId){
+        LikesUsersResponseDto eventResponseDto = likesService.getLikes(userId);
         return new ResponseEntity<>(eventResponseDto, HttpStatus.OK);
     }
 

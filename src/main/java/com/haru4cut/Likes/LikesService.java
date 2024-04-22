@@ -45,15 +45,15 @@ public class LikesService {
         return new LikesResponseDto(events.getCount());
     }
 
-    public EventResponseDto getLikes(Long userId){
+    public LikesUsersResponseDto getLikes(Long userId){
         Optional<Users> findUsers = userRepository.findById(userId);
         if(!findUsers.isPresent()){
             throw new CustomException(ErrorCode.NOT_FOUND);
         }
         Users users = userRepository.findUserById(userId);
         List<Events> eventsList = eventRepository.findEventsByUsers(users);
-        String date = eventsList.get(0).getDate();
         List<String> likesList = new ArrayList<>();
+        List<String> dateList = new ArrayList<>();
         for(int i = 0; i < eventsList.size(); i++){
             Events events = eventsList.get(i);
             Optional<Likes> findLikes = likesRepository.findLikesByEvents(events);
@@ -62,9 +62,10 @@ public class LikesService {
             }
             if (findLikes.isPresent()){
                 likesList.add(events.getUrl());
+                dateList.add(events.getDate());
             }
         }
-        return new EventResponseDto(likesList, date);
+        return new LikesUsersResponseDto(likesList, dateList);
     }
 
 

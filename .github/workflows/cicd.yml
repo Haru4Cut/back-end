@@ -16,10 +16,9 @@ jobs:
             PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }} 
             HOSTNAME: ${{ secrets.HOST }} 
             USER_NAME: ${{ secrets.SSH_USERNAME }} 
-
         run: |
           cd ~/back-end
-          pkill -f "java -jar haru4cut-0.0.1-SNAPSHOT.jar"          
+          pkill "java -jar haru4cut-0.0.1-SNAPSHOT.jar"          
           git pull
           /home/ubuntu/back-end/gradlew clean build -x test
           cd /home/ubuntu/back-end/build/libs

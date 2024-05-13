@@ -10,6 +10,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - uses: actions/checkout@v2
+      - name: pathTest
+        run : |
+          cd ~/back-end
+          pwd
+
       - uses: actions/checkout@v2 
       - name: Build & Deploy
         env:

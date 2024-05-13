@@ -18,7 +18,7 @@ jobs:
             USER_NAME: ${{ secrets.SSH_USERNAME }} 
 
         run: |
-          cd /home/ubuntu/back-end
+          cd ~/back-end
           pkill -f "java -jar haru4cut-0.0.1-SNAPSHOT.jar"          
           git pull
           /home/ubuntu/back-end/gradlew clean build -x test

@@ -10,20 +10,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v2
-      
-    - name: Deploy with SSH
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.HOST }} 
-        username: ${{ secrets.SSH_USERNAME }}  
-        key: ${{ secrets.PRIVATE_KEY }} 
-        port: ${{ secrets.PORT }}
-        script: |
+      - uses: actions/checkout@v2 
+      - name: Build & Deploy
+        env:
+            PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }} 
+            HOSTNAME: ${{ secrets.HOST }} 
+            USER_NAME: ${{ secrets.SSH_USERNAME }} 
+
+        run: |
           cd /home/ubuntu/back-end
           pkill -f "java -jar haru4cut-0.0.1-SNAPSHOT.jar"          
           git pull
-          ./gradlew clean build -x test
-          cd build/libs
+          /home/ubuntu/back-end/gradlew clean build -x test
+          cd /home/ubuntu/back-end/build/libs
           nohup java -jar haru4cut-0.0.1-SNAPSHOT.jar &

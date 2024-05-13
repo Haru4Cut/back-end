@@ -21,11 +21,11 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             cd ~/back-end
-            pkill -f 'java -jar haru4cut-0.0.1-SNAPSHOT.jar'  # 프로세스 죽이기
+            sudo pkill -f 'java -jar haru4cut-0.0.1-SNAPSHOT.jar'  # 프로세스 죽이기
             git pull origin main
             /home/ubuntu/back-end/gradlew clean build -x test
             cd /home/ubuntu/back-end/build/libs
-            nohup java -jar haru4cut-0.0.1-SNAPSHOT.jar &
+            sudo nohup java -jar haru4cut-0.0.1-SNAPSHOT.jar &
             
       # 종료 코드가 143인 경우에만 에러를 출력하지 않음
       - name: Handle exit code

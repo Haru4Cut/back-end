@@ -21,9 +21,8 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             cd ~/back-end
-            echo $(pgrep -f 'java -jar haru4cut-0.0.1-SNAPSHOT.jar')
+            pkill -f 'java -jar haru4cut-0.0.1-SNAPSHOT.jar')  # 프로세스 죽이기
             git pull
             /home/ubuntu/back-end/gradlew clean build -x test
             cd /home/ubuntu/back-end/build/libs
-            pwd
             nohup java -jar haru4cut-0.0.1-SNAPSHOT.jar &

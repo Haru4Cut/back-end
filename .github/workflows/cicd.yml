@@ -19,6 +19,13 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.PRIVATE_KEY }}
           port: ${{ secrets.PORT }}
+          openai.key : ${{ secrets.OPENAI_KEY }}
+          cloud.aws.credentials.accessKey: ${{ secrets.S3_ACCESS_KEY }}
+          cloud.aws.credentials.accessKeyProfile: ${{ secrets.S3_ACCESS_PROFILE_KEY }}
+          cloud.aws.credentials.secretKey: ${{ secrets.S3_SECRET_KEY }}
+          cloud.aws.credentials.secretKeyProfile : ${{ secrets.S3_SECRET_PROFILE_KEY }}
+          jwt.secretKey : ${{ secrets.JWT_SECRET_KEY }}
+
           script: |
             chmod +x ./deploy.sh
             ./deploy.sh

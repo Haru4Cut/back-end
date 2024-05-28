@@ -27,7 +27,7 @@ public class Events {
     private Long count = 0L;
 
     @Column(name = "keywords")
-    private String[] keywords;
+    private List<String> keywords;
 
     @Column(name = "emotion")
     private int emotion;
@@ -45,10 +45,12 @@ public class Events {
     private int orderNum;
 
 
-    public Events(Users users, String url, String date) {
+    public Events(Users users, String url, String date, List<String> keywords, int emotion) {
         this.users = users;
         this.url = url;
         this.date = date;
+        this.keywords = keywords;
+        this.emotion = emotion;
     }
 
     public void updateLike(Long count){

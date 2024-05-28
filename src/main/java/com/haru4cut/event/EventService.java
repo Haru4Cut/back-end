@@ -3,6 +3,11 @@ package com.haru4cut.event;
 import com.haru4cut.S3.ByteToMultiPartFile;
 import com.haru4cut.S3.S3Uploader;
 import com.haru4cut.dalle.APIService;
+import com.haru4cut.diary.Diary;
+import com.haru4cut.diary.DiaryRepository;
+import com.haru4cut.domain.Character.CharacterRepository;
+import com.haru4cut.domain.Character.Characters;
+import com.haru4cut.domain.profile.ImageRequestDto;
 import com.haru4cut.domain.user.UserRepository;
 import com.haru4cut.domain.user.Users;
 import com.haru4cut.global.exception.CustomException;
@@ -16,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,29 +39,34 @@ public class EventService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private DiaryRepository diaryRepository;
+    @Autowired
     private final EventFlaskService eventFlaskService;
+    @Autowired
+    private CharacterRepository characterRepository;
 
     // S3 링크 받아와서 출력하는 코드
     public List<String> createEvents(Long userId, List<EventRequestDto> events) throws IOException {
         List<String> eventsList = new ArrayList<>();
         Users users = userRepository.findById(userId).get();
-        byte[][] base64 = getImgB64(events);
+        byte[][] base64 = getImgB64(events, users.getId());
         int cutNum = getCutNum(events);
         String url = null;
         for(int i = 0; i < cutNum ; i++) {
             MultipartFile multipartFile = byteToMultiPartFile.changeByte(base64[i], events.get(0).date, events.get(i).orderNum, users.getId());
             url = s3Uploader.saveFile(multipartFile);
             String date = events.get(0).getDate();
-            Events event = eventRepository.save(new Events(users, url, date));
+            Events event = eventRepository.save(new Events(users, url, date, events.get(i).keywords, events.get(i).emotion));
             eventsList.add(event.getId() + " : " + url);
         }
         return eventsList;
     }
 
     // 각 컷 수 마다 Base64 형태로 그림 받아올 수 있도록 나누어 놓음
-        private byte[][] getImgB64(List<EventRequestDto> events) {
+        private byte[][] getImgB64(List<EventRequestDto> events, Long userId) {
         promptList = new ArrayList<>();
-        promptList = makePrompt(events);
+        promptList = makePrompt(events, userId);
         int cutNum = getCutNum(events);
         if(cutNum == 1) {
             base64 = getOneB64(promptList);
@@ -69,8 +80,9 @@ public class EventService {
         return base64;
     }
 
-    private List<String> makePrompt(List<EventRequestDto> events){
+    private List<String> makePrompt(List<EventRequestDto> events, Long userId){
         List<EventFlaskRequestDto> flaskEvent = new ArrayList<>();
+        HashMap<String, String> characterInfo = makeCharacterInfo(userId);
         for(int i = 0; i < events.size(); i++){
             int emotionNum = events.get(i).getEmotion();
             String emotion = Emotions.getEmotion(emotionNum);
@@ -80,13 +92,35 @@ public class EventService {
                     events.get(i).getCutNum(),
                     events.get(i).getKeywords(),
                     events.get(i).getDate(),
-                    events.get(i).getOrderNum()
+                    events.get(i).getOrderNum(),
+                    characterInfo
             );
-
             flaskEvent.add(eventFlaskRequestDto);
         }
+
+        System.out.println("프롬프트 리스트 " + flaskEvent);
         List<String> promptList = eventFlaskService.sendToFlask(flaskEvent);
         return promptList;
+    }
+
+    private HashMap<String, String> makeCharacterInfo(Long userId){
+        Users users = userRepository.findUserById(userId);
+        Optional<Characters> characters = characterRepository.findByUsers(users);
+        if(characters.isEmpty()) {
+            throw new CustomException(ErrorCode.NOT_FOUND);
+        }
+        Characters characters1 = characters.get();
+        ImageRequestDto imageRequestDto = new ImageRequestDto(
+                characters1.getSex(),
+                characters1.getAge(),
+                characters1.getHairColor(),
+                characters1.getHairLength(),
+                characters1.getSkinColor(),
+                characters1.getEtc()
+        );
+        HashMap<String, String> characterInfo = imageRequestDto.asMap();
+        return characterInfo;
+
     }
 
     private byte[][] getOneB64(List<String> promptList){
@@ -134,6 +168,27 @@ public class EventService {
         return firstCutNum;
     }
 
-
-
+    // 링크를 통해 Keyword와 감정 받아와야 함
+    public List<String> getKeywordAndEmotion(Long diaryId){
+        Optional<Diary> diary = diaryRepository.findById(diaryId);
+        List<String> real_img = new ArrayList<>();
+        if(diary.isEmpty()){
+            throw new CustomException(ErrorCode.NOT_FOUND);
+        }
+        List<String> imgLinks = diary.get().getImgLinks();
+        int cutNum = diary.get().getCutNum();
+        List<String> answers = new ArrayList<>();
+        for(int i = 0; i < imgLinks.size(); i++){
+            String[] links = imgLinks.get(i).split(":", 2);
+            real_img.add(links[1].trim());
+        }
+        for(int i = 0; i < real_img.size(); i++){
+            Events events = eventRepository.findEventsByUrl(real_img.get(i));
+            int emotion = events.getEmotion();
+            List<String> keywords = events.getKeywords();
+            answers.add(emotion + ":" + keywords);
+            System.out.println("answer" + answers);
+        }
+        return answers;
+    }
 }

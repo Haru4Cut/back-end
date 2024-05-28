@@ -11,8 +11,8 @@ import java.util.HashMap;
 public class ImageRequestDto {
 
     @JsonIgnore
-    private static String properties[][] = {{"남성", "여성"}, {"10대", "20-30대","40-50대","60대 이상"}, {"단발","장발","숏컷"},
-            {"검정", "갈색", "빨강", "금발"},{"하얀피부", "황인피부", "어두운피부"}};
+    private static String properties[][] = {{"여성", "남성"}, {"10대", "20-30대","40-50대","60대 이상"}, {"숏컷","단발","장발"},
+            {"검정", "갈색", "빨강", "금발"},{"하얀 피부", "황인 피부", "어두운 피부"}};
     private Long sex;
     private Long age;
     private Long hairColor;

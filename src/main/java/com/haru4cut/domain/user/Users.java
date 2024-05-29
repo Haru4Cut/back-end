@@ -49,12 +49,13 @@ public class Users {
     private List<Events> events = new ArrayList<>();
 
     @Builder
-    public Users(String email, String password, String name, String socialId, SocialType socialType) {
+    public Users(String email, String password, String name, String socialId, SocialType socialType, int pencils) {
         this.email = email;
         this.password = password;
         this.name = name;
         this.socialId = socialId;
         this.socialType = socialType;
+        this.pencils = pencils;
     }
 
     public Users(String email, String password) {

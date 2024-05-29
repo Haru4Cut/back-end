@@ -52,6 +52,7 @@ public class EventService {
         Users users = userRepository.findById(userId).get();
         byte[][] base64 = getImgB64(events, users.getId());
         int cutNum = getCutNum(events);
+        int pencils = users.getPencils();
         String url = null;
         for(int i = 0; i < cutNum ; i++) {
             MultipartFile multipartFile = byteToMultiPartFile.changeByte(base64[i], events.get(0).date, events.get(i).orderNum, users.getId());
@@ -59,7 +60,10 @@ public class EventService {
             String date = events.get(0).getDate();
             Events event = eventRepository.save(new Events(users, url, date, events.get(i).keywords, events.get(i).emotion));
             eventsList.add(event.getId() + " : " + url);
+            pencils -= 1;
         }
+        Users new_users = new Users(userId, pencils);
+        userRepository.save(new_users);
         return eventsList;
     }
 

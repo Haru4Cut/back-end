@@ -7,7 +7,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://52.79.154.88:3306/haru4cut
     username : junseo
-    password: Haru4cut!
+    password: ${SQL_PASSWORD}
   jpa:
     show-sql: true
     hibernate:

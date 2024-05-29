@@ -3,7 +3,10 @@ package com.haru4cut.domain.profile;
 import com.haru4cut.domain.Character.CharacterService;
 import com.haru4cut.domain.profile.dalle.ProfileService;
 import com.haru4cut.domain.s3.S3ProfileUploader;
-import com.haru4cut.domain.user.UserService;
+import com.haru4cut.domain.user.UserRepository;
+import com.haru4cut.domain.user.Users;
+import com.haru4cut.global.exception.CustomException;
+import com.haru4cut.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.stereotype.Service;
@@ -12,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -21,6 +25,7 @@ public class ImageService {
     private final ProfileService profileService;
     private final CharacterService characterService;
     private final S3ProfileUploader s3ProfileUploader;
+    private UserRepository userRepository;
 
     public String generateProfileImage(ImageRequestDto imageRequestDto, Long userId) {
 
@@ -34,6 +39,13 @@ public class ImageService {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        Optional<Users> users = userRepository.findById(userId);
+        if(users.isEmpty()){
+            throw  new CustomException(ErrorCode.NOT_FOUND);
+        }
+        int pencils = users.get().getPencils();
+        Users new_user = new Users(userId, pencils-1);
+        userRepository.save(new_user);
 
         return imgUri;
     }

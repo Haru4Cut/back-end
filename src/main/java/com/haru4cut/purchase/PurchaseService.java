@@ -27,6 +27,8 @@ public class PurchaseService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private PurchaseRepository purchaseRepository;
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -46,13 +48,17 @@ public class PurchaseService {
 
         IamportResponse<Payment> iamportResponse = iamportClient.paymentByImpUid(imp_uid);
         BigDecimal paidAmount = iamportResponse.getResponse().getAmount();
+        String merchant_uid = iamportResponse.getResponse().getMerchantUid();
 
+        if(purchaseRepository.existsById(merchant_uid)){
+            return new MessageResponse("구매에 실패하였습니다: 중복된 주문 번호");
+        }
         if(paidAmount.compareTo(dbPrice) != 0){ // 반환값 0 -> 두 객체 같음, 반환값 양수 -> 비교 대상인 객체 (compare 안) 가 비교되는 객체보다 큼 , 음수
             IamportResponse<Payment> response = iamportClient.paymentByImpUid(imp_uid);
             CancelData cancelData = createCancelData(response, 0); // 우린 전체 환불만 해주자
             iamportClient.cancelPaymentByImpUid(cancelData);
 
-            return new MessageResponse("구매에 실패하였습니다");
+            return new MessageResponse("구매에 실패하였습니다: 금액 불일치");
         }
         Users users = userRepository.findUserById(userId);
         int pencils = users.getPencils();
@@ -60,8 +66,9 @@ public class PurchaseService {
         int plus = goods.getPencil();
         int total = pencils + plus;
         Users new_users = new Users(userId, total);
-        userRepository.save(new_users); //안되면 setter 써야지 뭔
-
+        userRepository.save(new_users); //안되면 setter 써야지 머
+        Purchase purchase = new Purchase(merchant_uid, users);
+        purchaseRepository.save(purchase);
         return new MessageResponse("구매가 완료 되었습니다");
     }
 

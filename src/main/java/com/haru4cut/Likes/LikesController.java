@@ -27,11 +27,16 @@ public class LikesController {
         return new ResponseEntity<>(likesResponseDto, HttpStatus.OK);
     }
 
-    @GetMapping("likes/{userId}")
+    @GetMapping("likes/users/{userId}")
     public ResponseEntity<LikesUsersResponseDto> getLikesEvents(@PathVariable Long userId){
         LikesUsersResponseDto eventResponseDto = likesService.getLikes(userId);
         return new ResponseEntity<>(eventResponseDto, HttpStatus.OK);
     }
 
+    @GetMapping("likes/events/{eventId}")
+    public ResponseEntity<Long> getLikes(@PathVariable Long eventId){
+        Long likes = likesService.getLike(eventId);
+        return new ResponseEntity<>(likes, HttpStatus.OK);
+    }
 
 }

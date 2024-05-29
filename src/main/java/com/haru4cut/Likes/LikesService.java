@@ -3,7 +3,6 @@ package com.haru4cut.Likes;
 import com.haru4cut.domain.user.UserRepository;
 import com.haru4cut.domain.user.Users;
 import com.haru4cut.event.EventRepository;
-import com.haru4cut.event.EventResponseDto;
 import com.haru4cut.event.Events;
 import com.haru4cut.global.exception.CustomException;
 import com.haru4cut.global.exception.ErrorCode;
@@ -66,6 +65,15 @@ public class LikesService {
             }
         }
         return new LikesUsersResponseDto(likesList, dateList);
+    }
+
+    public long getLike(Long eventId){
+        Events events = eventRepository.findEventsById(eventId);
+        Optional<Likes> likes = likesRepository.findLikesByEvents(events);
+        if(likes.isPresent()){
+            return 1l;
+        }
+        return 0l;
     }
 
 

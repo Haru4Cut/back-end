@@ -15,11 +15,14 @@ spring:
     properties:
       hibernate:
         format_sql: true
+    defer-datasource-initialization: true
+
   profiles:
     active: local
     include:
       - jwt
       - oauth2
+
 cloud:
   aws:
     s3:
@@ -39,6 +42,10 @@ logging:
 jwt:
   secretKey: ${JWT_SECRET_KEY}
   expiration: 3600000
+
+sql:
+  init:
+    mode: always
 
 
 

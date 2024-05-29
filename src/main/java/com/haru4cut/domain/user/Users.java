@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +36,9 @@ public class Users {
     @Column(name = "socialId")
     private String socialId;
 
+    @Column(name = "pencils")
+    private int pencils;
+
     @Enumerated(EnumType.STRING)
     private SocialType socialType;
 
@@ -56,6 +60,11 @@ public class Users {
     public Users(String email, String password) {
         this.email = email;
         this.password = password;
+    }
+
+    public Users(Long id, int pencils){ // 연필 개수 갱신
+        this.id = id;
+        this.pencils = pencils;
     }
 
 

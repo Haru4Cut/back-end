@@ -14,8 +14,9 @@ public class CharacterVo {
     private String nickName;
     private String characterImage;
     private String etc;
+    private int pencils;
 
-    public CharacterVo(Long sex, Long age, Long hairColor, Long hairLength, Long skinColor, String nickName, String characterImage, String etc) {
+    public CharacterVo(Long sex, Long age, Long hairColor, Long hairLength, Long skinColor, String nickName, String characterImage, String etc, int pencils) {
         this.sex = sex;
         this.age = age;
         this.hairColor = hairColor;
@@ -24,5 +25,6 @@ public class CharacterVo {
         this.nickName = nickName;
         this.characterImage = characterImage;
         this.etc = etc;
+        this.pencils = pencils;
     }
 }

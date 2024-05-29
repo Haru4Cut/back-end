@@ -76,11 +76,10 @@ public class CharacterService {
         if (characterOptional.isEmpty()) {
             throw new CustomException(ErrorCode.NOT_FOUND);
         }
-
         Characters character = characterOptional.get();
 
         return new CharacterVo(character.getSex(), character.getAge(), character.getHairColor(), character.getHairLength(), character.getSkinColor()
-                , character.getNickName(), character.getCharacterImg(), character.getEtc());
+                , character.getNickName(), character.getCharacterImg(), character.getEtc(), user.get().getPencils());
     }
 
     private Optional<Users> findUser(Long userId) {

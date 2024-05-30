@@ -44,6 +44,6 @@ public class OAuth2LoginService implements LoginService {
 
 
     public Long createUser(String socialId, SocialType socialType, String name) {
-        return userRepository.save(Users.builder().socialType(socialType).socialId(socialId).name(name).pencils(15).build()).getId();
+        return userRepository.save(Users.builder().socialType(socialType).socialId(socialId).name(name).pencils(16).build()).getId();
     }
 }

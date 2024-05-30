@@ -25,7 +25,7 @@ public class ImageService {
     private final ProfileService profileService;
     private final CharacterService characterService;
     private final S3ProfileUploader s3ProfileUploader;
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     public String generateProfileImage(ImageRequestDto imageRequestDto, Long userId) {
 

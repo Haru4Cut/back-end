@@ -45,7 +45,7 @@ public class PurchaseService {
 
     public MessageResponse PurchaseVerify(Long userId,Long goodsId, String imp_uid) throws IamportResponseException, IOException {
         BigDecimal dbPrice = calculateDBAmount(goodsId);
-
+        System.out.println("importUid" + imp_uid);
         IamportResponse<Payment> iamportResponse = iamportClient.paymentByImpUid(imp_uid);
         BigDecimal paidAmount = iamportResponse.getResponse().getAmount();
         String merchant_uid = iamportResponse.getResponse().getMerchantUid();

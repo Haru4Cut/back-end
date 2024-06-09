@@ -1,5 +1,8 @@
 package com.haru4cut.domain.jwt;
 
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.security.SignatureException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,14 +14,14 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
-public class JwtAuthenticationFilter extends OncePerRequestFilter {
+public class JwtAuthenticationFilter extends OncePerRequestFilter{
 
     private final JwtTokenProvider jwtTokenProvider;
-// "/.*", "*"
-    private final String[] REQUEST_PERMITTED = {"/h2-console","/h2-console/.*", "/favicon.ico", "/users/login/.*", "/.*"};
+    private final String[] REQUEST_PERMITTED = {"/h2-console","/h2-console/.*", "/users/login/.*", "/test"};
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -28,17 +31,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return ;
         }
 
-        if (Arrays.stream(REQUEST_PERMITTED).anyMatch(r -> request.getRequestURI().matches(r))) {
-            log.info("로그인 요청 시 필터 통과");
-            filterChain.doFilter(request, response);
-            return ;
-        }
+        try {
+            Optional<String> accessToken = Optional.ofNullable(request.getHeader("Authorization").split(" ")[1]);
+            if (accessToken.isEmpty() || !jwtTokenProvider.validateToken(accessToken.get())) {
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "인증에 실패하였습니다.");
+                return;
+            }
 
-        String accessToken = request.getHeader("Authorization").split(" ")[1];
+                Long userId = Long.parseLong(jwtTokenProvider.getUserId(accessToken.get()));
+            jwtTokenProvider.getAuthentication(userId);
 
-        if (accessToken == null || accessToken.isBlank() || !jwtTokenProvider.validateToken(accessToken)) {
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "인증에 실패하였습니다.");
-            return ;
+        } catch (Exception e) {
+            log.error("validateToken Error!");
         }
 
         filterChain.doFilter(request, response);

@@ -2,13 +2,13 @@ package com.haru4cut.domain.user;
 
 import com.haru4cut.diary.Diary;
 import com.haru4cut.domain.oauth2.SocialType;
+import com.haru4cut.domain.security.UserRole;
 import com.haru4cut.event.Events;
 import com.haru4cut.purchase.Purchase;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +40,8 @@ public class Users {
     @Column(name = "pencils")
     private int pencils;
 
+    @Enumerated(EnumType.STRING)
+    private UserRole role = UserRole.ROLE_SUBSCRIBER;
     @Enumerated(EnumType.STRING)
     private SocialType socialType;
 

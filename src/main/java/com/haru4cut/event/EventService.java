@@ -62,8 +62,8 @@ public class EventService {
             eventsList.add(event.getId() + " : " + url);
             pencils -= 1;
         }
-        Users new_users = new Users(userId, pencils);
-        userRepository.save(new_users);
+        users.setPencils(pencils);
+        userRepository.save(users);
         return eventsList;
     }
 

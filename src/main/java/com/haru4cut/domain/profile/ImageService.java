@@ -40,12 +40,13 @@ public class ImageService {
             throw new RuntimeException(e);
         }
         Optional<Users> users = userRepository.findById(userId);
+        Users users1 = userRepository.findUserById(userId);
         if(users.isEmpty()){
             throw  new CustomException(ErrorCode.NOT_FOUND);
         }
         int pencils = users.get().getPencils();
-        Users new_user = new Users(userId, pencils-1);
-        userRepository.save(new_user);
+        users1.setPencils(pencils-1);
+        userRepository.save(users1);
 
         return imgUri;
     }

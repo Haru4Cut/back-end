@@ -65,8 +65,8 @@ public class PurchaseService {
         Goods goods = entityManager.find(Goods.class, goodsId);
         int plus = goods.getPencil();
         int total = pencils + plus;
-        Users new_users = new Users(userId, total);
-        userRepository.save(new_users); //안되면 setter 써야지 머
+        users.setPencils(total);
+        userRepository.save(users); //안되면 setter 써야지 머
         Purchase purchase = new Purchase(merchant_uid, users);
         purchaseRepository.save(purchase);
         return new MessageResponse("구매가 완료 되었습니다");

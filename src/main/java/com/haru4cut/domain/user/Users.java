@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
+@Getter @Setter
 @NoArgsConstructor
 @Entity
 @Table(name = "users")
@@ -68,11 +68,5 @@ public class Users {
         this.email = email;
         this.password = password;
     }
-
-    public Users(Long id, int pencils){ // 연필 개수 갱신
-        this.id = id;
-        this.pencils = pencils;
-    }
-
 
 }

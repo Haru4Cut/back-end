@@ -13,7 +13,7 @@ import java.util.List;
 @Service
 @Slf4j
 public class CommentFlaskService {
-    static String MODEL_REQUEST_URL = "";
+    static String MODEL_REQUEST_URL = "http://43.200.188.243:8080/makecomment";
 
     public CommentFlaskResponseDto getCommentToFlask(List<Object> dto){
         RestTemplate restTemplate = new RestTemplate();

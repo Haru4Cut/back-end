@@ -47,6 +47,11 @@ public class PurchaseService {
         BigDecimal dbPrice = calculateDBAmount(goodsId);
         System.out.println("importUid" + imp_uid);
         IamportResponse<Payment> iamportResponse = iamportClient.paymentByImpUid(imp_uid);
+
+        if (iamportResponse.getResponse() == null){
+            return new MessageResponse("구매에 실패하였습니다: 결제 정보를 찾을 수 없습니다.");
+        }
+
         BigDecimal paidAmount = iamportResponse.getResponse().getAmount();
         String merchant_uid = iamportResponse.getResponse().getMerchantUid();
 

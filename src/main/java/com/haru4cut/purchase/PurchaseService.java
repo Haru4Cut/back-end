@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.Optional;
+
 
 @Service
 @RequiredArgsConstructor
@@ -26,7 +26,6 @@ public class PurchaseService {
 
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private PurchaseRepository purchaseRepository;
     @PersistenceContext
@@ -43,9 +42,8 @@ public class PurchaseService {
         this.iamportClient = new IamportClient(apiKey, secretKey);
     }
 
-    public MessageResponse PurchaseVerify(Long userId,Long goodsId, String imp_uid) throws IamportResponseException, IOException {
+    public MessageResponse PurchaseVerify(Long goodsId,Long userId, String imp_uid) throws IamportResponseException, IOException {
         BigDecimal dbPrice = calculateDBAmount(goodsId);
-        System.out.println("importUid" + imp_uid);
         IamportResponse<Payment> iamportResponse = iamportClient.paymentByImpUid(imp_uid);
 
         if (iamportResponse.getResponse() == null){
@@ -63,7 +61,7 @@ public class PurchaseService {
             CancelData cancelData = createCancelData(response, 0); // 우린 전체 환불만 해주자
             iamportClient.cancelPaymentByImpUid(cancelData);
 
-            return new MessageResponse("구매에 실패하였습니다: 금액 불일치");
+            return new MessageResponse("지불 금액 :" + paidAmount + " db 금액 : "+ dbPrice +"구매에 실패하였습니다: 금액 불일치");
         }
         Users users = userRepository.findUserById(userId);
         int pencils = users.getPencils();
@@ -83,6 +81,7 @@ public class PurchaseService {
         if (goods != null){
             return goods.getPrice();
         } else {
+            System.out.println("이거 찍히면 goods가 안불러와 지는거");
             return price;
         }
     }

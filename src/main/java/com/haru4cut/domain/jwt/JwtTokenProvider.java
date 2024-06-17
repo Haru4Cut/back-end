@@ -1,5 +1,6 @@
 package com.haru4cut.domain.jwt;
 
+import com.haru4cut.domain.security.UserRole;
 import com.haru4cut.domain.user.UserRepository;
 import com.haru4cut.domain.user.UserService;
 import com.haru4cut.domain.user.Users;
@@ -25,6 +26,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
@@ -96,9 +98,11 @@ public class JwtTokenProvider {
         return !claims.getBody().getExpiration().before(new Date());
     }
 
+    @Transactional
     public void getAuthentication(Long userId) {
 
         Users user = userRepository.findById(userId).get();
+        updateAuthority(user);
 
         UserDetails userDetails = User.builder().username(user.getName())
                 .password("default").authorities(user.getRole().getAuthority())
@@ -108,6 +112,14 @@ public class JwtTokenProvider {
                 null, authoritiesMapper.mapAuthorities(userDetails.getAuthorities()));
 
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+    }
+
+    private void updateAuthority(Users user) {
+        if (user.getPencils() <= 0 && user.getRole() == UserRole.ROLE_SUBSCRIBER) {
+            user.editAuthority(UserRole.ROLE_USER);
+        } else if (user.getPencils() > 0 && user.getRole() == UserRole.ROLE_USER) {
+            user.editAuthority(UserRole.ROLE_SUBSCRIBER);
+        }
     }
 
 }

@@ -71,4 +71,8 @@ public class Users {
         this.password = password;
     }
 
+    public void editAuthority(UserRole userRole) {
+        this.role = userRole;
+    }
+
 }

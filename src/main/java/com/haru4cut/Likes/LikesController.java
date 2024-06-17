@@ -6,10 +6,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -19,11 +16,10 @@ import java.util.List;
 public class LikesController {
     private final LikesService likesService;
 
-    @PostMapping("likes/{userId}/{eventId}")
+    @PostMapping("likes/{userId}")
     public ResponseEntity<LikesResponseDto> createLikes(@PathVariable Long userId,
-                                                        @PathVariable Long eventId){
-
-        LikesResponseDto likesResponseDto = likesService.postLike(userId,eventId);
+                                                        @RequestBody LikeDto likeDto){
+        LikesResponseDto likesResponseDto = likesService.postLike(userId,likeDto);
         return new ResponseEntity<>(likesResponseDto, HttpStatus.OK);
     }
 
@@ -33,9 +29,9 @@ public class LikesController {
         return new ResponseEntity<>(eventResponseDto, HttpStatus.OK);
     }
 
-    @GetMapping("likes/events/{eventId}")
-    public ResponseEntity<Long> getLikes(@PathVariable Long eventId){
-        Long likes = likesService.getLike(eventId);
+    @GetMapping("likes/events")
+    public ResponseEntity<Long> getLikes(@RequestBody LikeDto likeDto){
+        Long likes = likesService.getLike(likeDto);
         return new ResponseEntity<>(likes, HttpStatus.OK);
     }
 

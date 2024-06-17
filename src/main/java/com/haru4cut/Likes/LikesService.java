@@ -24,16 +24,18 @@ public class LikesService {
     @Autowired
     private LikesRepository likesRepository;
 
-    public LikesResponseDto postLike(Long userId, Long eventId) {
+    public LikesResponseDto postLike(Long userId, LikeDto likeDto) {
+        System.out.println("url" + likeDto);
         Optional<Users> findUsers = userRepository.findById(userId);
-        Optional<Events> findEvents = eventRepository.findById(eventId);
-        if(!findUsers.isPresent() || !findEvents.isPresent()){
+        Events event = eventRepository.findEventsByUrl(likeDto.url);
+        Optional<Events> findEvents = eventRepository.findById(event.getId());
+        if(findUsers.isEmpty() || findEvents.isEmpty()){
             throw new CustomException(ErrorCode.NOT_FOUND);
         }
         Users users = userRepository.findUserById(userId);
-        Events events = eventRepository.findEventsById(eventId);
+        Events events = eventRepository.findEventsById(findEvents.get().getId());
         Optional<Likes> likes = likesRepository.findByUsersAndEvents(users,events);
-        if(!likes.isPresent()){
+        if(likes.isEmpty()){
             likesRepository.save(LikesRequestDto.toEntity(users,events));
             events.updateLike(1L);
         }
@@ -67,8 +69,8 @@ public class LikesService {
         return new LikesUsersResponseDto(likesList, dateList);
     }
 
-    public long getLike(Long eventId){
-        Events events = eventRepository.findEventsById(eventId);
+    public long getLike(LikeDto likeDto){
+        Events events = eventRepository.findEventsByUrl(likeDto.getUrl());
         Optional<Likes> likes = likesRepository.findLikesByEvents(events);
         if(likes.isPresent()){
             return 1l;

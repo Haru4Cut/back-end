@@ -40,7 +40,7 @@ public class CharacterService {
         return characterRepository.save(character).getId();
     }
 
-    public CharacterResponseDto editCharacter(Long userId, CharacterRequestDto characterRequestDto) {
+    public CharacterResponseDto editCharacter(Long userId, CharacterRequestDto characterRequestDto) throws IOException {
 
         Optional<Users> user = findUser(userId);
 
@@ -49,7 +49,8 @@ public class CharacterService {
         if (characterOptional.isEmpty()) {
             throw new CustomException(ErrorCode.NOT_FOUND);
         }
-
+        String profileUri = s3ProfileUploader.copyFile(String.valueOf(userId));
+        characterRequestDto.setCharacterImage(profileUri);
         Characters character = characterOptional.get();
         character.updateCharacter(characterRequestDto);
         characterRepository.save(character);

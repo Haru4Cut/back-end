@@ -26,7 +26,7 @@ public class CharacterController {
     }
 
     @PatchMapping("/{userId}")
-    public ResponseEntity updateCharacter(@RequestBody CharacterRequestDto characterRequestDto, @PathVariable(name = "userId") Long userId) {
+    public ResponseEntity updateCharacter(@RequestBody CharacterRequestDto characterRequestDto, @PathVariable(name = "userId") Long userId) throws IOException {
         CharacterResponseDto characterResponseDto = characterService.editCharacter(userId, characterRequestDto);
         return ResponseEntity.ok(characterRequestDto);
     }

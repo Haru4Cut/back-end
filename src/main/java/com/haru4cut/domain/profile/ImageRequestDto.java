@@ -34,8 +34,8 @@ public class ImageRequestDto {
 
         map.put("sex", properties[0][this.sex.intValue() - 1]); // 성별
         map.put("age", properties[1][this.age.intValue() - 1]); // 나이
-        map.put("hairColor", properties[2][this.hairColor.intValue() - 1]); // 머리색
-        map.put("hairLength", properties[3][this.hairLength.intValue() - 1]); // 머리길이
+        map.put("hairLength", properties[2][this.hairLength.intValue() - 1]); // 머리길이
+        map.put("hairColor", properties[3][this.hairColor.intValue() - 1]); // 머리색
         map.put("skinColor", properties[4][this.skinColor.intValue() - 1]); // 피부색
         map.put("etc", this.etc);
 

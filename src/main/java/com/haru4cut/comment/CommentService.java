@@ -2,16 +2,19 @@ package com.haru4cut.comment;
 
 import com.haru4cut.diary.Diary;
 import com.haru4cut.diary.DiaryRepository;
+import com.haru4cut.domain.user.Users;
 import com.haru4cut.event.Emotions;
 import com.haru4cut.event.EventService;
 import com.haru4cut.global.exception.CustomException;
 import com.haru4cut.global.exception.ErrorCode;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
 @Service
+@AllArgsConstructor
 public class CommentService {
 
     @Autowired
@@ -21,9 +24,12 @@ public class CommentService {
 
     @Autowired
     private CommentFlaskService commentFlaskService;
+    @Autowired
+    private CommentRepository commentRepository;
 
     public CommentFlaskResponseDto makeComment(Long diaryId){
         Optional<Diary> diary = diaryRepository.findById(diaryId);
+        Diary c_diary = diaryRepository.findDiaryById(diaryId);
         List<Object> result = new ArrayList<>();
         if(diary.isEmpty()){
             throw new CustomException(ErrorCode.NOT_FOUND);
@@ -49,7 +55,23 @@ public class CommentService {
             contentMap.put("content", contents);
             result.add(contentMap);
         }
-        CommentFlaskResponseDto comment = commentFlaskService.getCommentToFlask(result);
-        return comment;
+        CommentFlaskResponseDto comments = commentFlaskService.getCommentToFlask(result);
+        Users users = diary.get().getUsers();
+        commentRepository.save(CommentRequestDto.toEntity(users,c_diary,comments.getContents()));
+        return comments;
+    }
+
+    public CommentFlaskResponseDto getComments(Long diaryId){
+        Optional<Diary> diary = diaryRepository.findById(diaryId);
+        if(diary.isEmpty()){
+            throw new CustomException(ErrorCode.NOT_FOUND);
+        }
+        Diary diary1 = diary.get();
+        Optional<Comments> comments = commentRepository.findCommentsByDiary(diary1);
+        if(comments.isEmpty()){
+            throw new CustomException(ErrorCode.NOT_FOUND);
+        }
+        CommentFlaskResponseDto commentFlaskResponseDto = new CommentFlaskResponseDto(comments.get().getContents());
+        return commentFlaskResponseDto;
     }
 }

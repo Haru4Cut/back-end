@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
 
 @RequestMapping(value = "/character")
@@ -17,7 +18,7 @@ public class CharacterController {
     private final CharacterService characterService;
 
     @PostMapping("/{userId}")
-    public ResponseEntity createCharacter(@RequestBody CharacterRequestDto characterRequestDto, @PathVariable(name = "userId") Long userId) {
+    public ResponseEntity createCharacter(@RequestBody CharacterRequestDto characterRequestDto, @PathVariable(name = "userId") Long userId) throws IOException {
         Long characterId = characterService.saveCharacter(userId, characterRequestDto);
         ConcurrentHashMap<String, Long> body = new ConcurrentHashMap<>();
         body.put("characterId", characterId);

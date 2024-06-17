@@ -8,9 +8,11 @@ import java.math.BigDecimal;
 
 @Entity
 @Getter
+@Table(name="goods")
 public class Goods {
     @Id
-    @Column(name = "goodsId")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "goods_id")
     private Long id;
 
     @Column(name = "pencils")

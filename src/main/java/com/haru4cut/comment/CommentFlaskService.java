@@ -18,13 +18,15 @@ public class CommentFlaskService {
     public CommentFlaskResponseDto getCommentToFlask(List<Object> dto){
         RestTemplate restTemplate = new RestTemplate();
 
-        ResponseEntity<CommentFlaskResponseDto> responseEntity = restTemplate.exchange(
+        ResponseEntity<String> responseEntity = restTemplate.exchange(
                 MODEL_REQUEST_URL,
                 HttpMethod.POST,
                 new HttpEntity<>(dto),
-                new ParameterizedTypeReference<CommentFlaskResponseDto>() {}
+                new ParameterizedTypeReference<String>() {}
         );
-        return responseEntity.getBody();
+        String comments =  responseEntity.getBody().toString();
+        CommentFlaskResponseDto commentFlaskResponseDto = new CommentFlaskResponseDto(comments);
+        return commentFlaskResponseDto;
     }
 
 }

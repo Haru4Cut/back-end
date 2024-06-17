@@ -1,5 +1,6 @@
 package com.haru4cut.purchase;
 
+import com.haru4cut.domain.security.UserRole;
 import com.haru4cut.domain.user.UserRepository;
 import com.haru4cut.domain.user.Users;
 import com.siot.IamportRestClient.IamportClient;
@@ -72,6 +73,7 @@ public class PurchaseService {
         userRepository.save(users); //안되면 setter 써야지 머
         Purchase purchase = new Purchase(merchant_uid, users);
         purchaseRepository.save(purchase);
+        users.editAuthority(UserRole.ROLE_SUBSCRIBER);
         return new MessageResponse("구매가 완료 되었습니다");
     }
 

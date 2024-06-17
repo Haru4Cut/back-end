@@ -7,6 +7,7 @@ import com.haru4cut.domain.user.UserRepository;
 import com.haru4cut.domain.user.Users;
 import com.haru4cut.global.exception.CustomException;
 import com.haru4cut.global.exception.ErrorCode;
+import com.haru4cut.purchase.MessageResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.stereotype.Service;
@@ -27,8 +28,16 @@ public class ImageService {
     private final S3ProfileUploader s3ProfileUploader;
     private final UserRepository userRepository;
 
-    public String generateProfileImage(ImageRequestDto imageRequestDto, Long userId) {
-
+    public String generateProfileImage(ImageRequestDto imageRequestDto, Long userId) throws CustomException{
+        Optional<Users> users = userRepository.findById(userId);
+        Users users1 = userRepository.findUserById(userId);
+        if(users.isEmpty()){
+            throw new CustomException(ErrorCode.NOT_FOUND);
+        }
+        int pencils = users.get().getPencils();
+        if (pencils <= 0){
+            throw new CustomException("연필 충전이 필요합니다!");
+        }
         String prompt = modelClient.requestPrompt(imageRequestDto);
         byte[] bytes = profileService.generatePicture(prompt);
         MultipartFile multipartFile = changeByteToMultipartFile(bytes, userId);
@@ -39,12 +48,6 @@ public class ImageService {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        Optional<Users> users = userRepository.findById(userId);
-        Users users1 = userRepository.findUserById(userId);
-        if(users.isEmpty()){
-            throw  new CustomException(ErrorCode.NOT_FOUND);
-        }
-        int pencils = users.get().getPencils();
         users1.setPencils(pencils-1);
         userRepository.save(users1);
 

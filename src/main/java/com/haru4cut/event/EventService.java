@@ -30,7 +30,6 @@ import java.util.Optional;
 public class EventService {
     private List<String> promptList;
     private final APIService apiService;
-    private byte[][] base64;
     private ByteToMultiPartFile byteToMultiPartFile;
     private S3Uploader s3Uploader;
     @Autowired
@@ -50,10 +49,15 @@ public class EventService {
     public List<String> createEvents(Long userId, List<EventRequestDto> events) throws IOException {
         List<String> eventsList = new ArrayList<>();
         Users users = userRepository.findById(userId).get();
-        byte[][] base64 = getImgB64(events, users.getId());
         int cutNum = getCutNum(events);
         int pencils = users.getPencils();
+        if (pencils <= 0 || pencils < cutNum){
+            throw new CustomException("연필 충전이 필요합니다!");
+        }
+
+        byte[][] base64 = getImgB64(events, users.getId());
         String url = null;
+
         for(int i = 0; i < cutNum ; i++) {
             MultipartFile multipartFile = byteToMultiPartFile.changeByte(base64[i], events.get(0).date, events.get(i).orderNum, users.getId());
             url = s3Uploader.saveFile(multipartFile);
@@ -69,6 +73,7 @@ public class EventService {
 
     // 각 컷 수 마다 Base64 형태로 그림 받아올 수 있도록 나누어 놓음
         private byte[][] getImgB64(List<EventRequestDto> events, Long userId) {
+        byte[][] base64 = null;
         promptList = new ArrayList<>();
         promptList = makePrompt(events, userId);
         int cutNum = getCutNum(events);

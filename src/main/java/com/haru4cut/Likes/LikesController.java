@@ -29,7 +29,7 @@ public class LikesController {
         return new ResponseEntity<>(eventResponseDto, HttpStatus.OK);
     }
 
-    @GetMapping("likes/events")
+    @PostMapping("likes/events")
     public ResponseEntity<Long> getLikes(@RequestBody LikeDto likeDto){
         Long likes = likesService.getLike(likeDto);
         return new ResponseEntity<>(likes, HttpStatus.OK);

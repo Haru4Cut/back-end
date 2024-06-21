@@ -19,7 +19,7 @@ public class CommentController {
 
     private final CommentService commentService;
 
-    @PostMapping("/comments/{diaryId}")
+    @GetMapping("/comments/{diaryId}")
     public ResponseEntity<CommentFlaskResponseDto> postComment(@PathVariable Long diaryId){
         CommentFlaskResponseDto dto = commentService.makeComment(diaryId);
         return new ResponseEntity<>(dto, HttpStatus.OK);

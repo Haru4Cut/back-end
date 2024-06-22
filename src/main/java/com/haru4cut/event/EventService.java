@@ -62,7 +62,7 @@ public class EventService {
             MultipartFile multipartFile = byteToMultiPartFile.changeByte(base64[i], events.get(0).date, events.get(i).orderNum, users.getId());
             url = s3Uploader.saveFile(multipartFile);
             String date = events.get(0).getDate();
-            Events event = eventRepository.save(new Events(users, url, date, events.get(i).keywords, events.get(i).emotion));
+            Events event = eventRepository.save(new Events(users, url, date, events.get(i).getKeywords(), events.get(i).getEmotion()));
             eventsList.add(event.getId() + " : " + url);
             pencils -= 1;
         }
@@ -187,12 +187,9 @@ public class EventService {
         List<String> imgLinks = diary.get().getImgLinks();
         int cutNum = diary.get().getCutNum();
         List<String> answers = new ArrayList<>();
-        for(int i = 0; i < imgLinks.size(); i++){
-            String[] links = imgLinks.get(i).split(":", 2);
-            real_img.add(links[1].trim());
-        }
-        for(int i = 0; i < real_img.size(); i++){
-            Events events = eventRepository.findEventsByUrl(real_img.get(i));
+
+        for(int i = 0; i < cutNum; i++){
+            Events events = eventRepository.findEventsByUrl(imgLinks.get(i));
             int emotion = events.getEmotion();
             List<String> keywords = events.getKeywords();
             answers.add(emotion + ":" + keywords);

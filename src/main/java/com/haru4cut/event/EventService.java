@@ -59,7 +59,7 @@ public class EventService {
         String url = null;
 
         for(int i = 0; i < cutNum ; i++) {
-            MultipartFile multipartFile = byteToMultiPartFile.changeByte(base64[i], events.get(0).date, events.get(i).orderNum, users.getId());
+            MultipartFile multipartFile = byteToMultiPartFile.changeByte(base64[i], events.get(0).getDate(), events.get(i).getOrderNum(), users.getId());
             url = s3Uploader.saveFile(multipartFile);
             String date = events.get(0).getDate();
             Events event = eventRepository.save(new Events(users, url, date, events.get(i).getKeywords(), events.get(i).getEmotion()));
@@ -106,8 +106,6 @@ public class EventService {
             );
             flaskEvent.add(eventFlaskRequestDto);
         }
-
-        System.out.println("프롬프트 리스트 " + flaskEvent);
         List<String> promptList = eventFlaskService.sendToFlask(flaskEvent);
         return promptList;
     }

@@ -29,11 +29,11 @@ public class CommentService {
 
     public CommentFlaskResponseDto makeComment(Long diaryId){
         Optional<Diary> diary = diaryRepository.findById(diaryId);
-        Diary c_diary = diaryRepository.findDiaryById(diaryId);
         List<Object> result = new ArrayList<>();
         if(diary.isEmpty()){
             throw new CustomException(ErrorCode.NOT_FOUND);
         }
+        Diary c_diary = diaryRepository.findDiaryById(diaryId);
         int cutNum = diary.get().getCutNum();
         String contents = diary.get().getText();
         List<String> keyList = eventService.getKeywordAndEmotion(diary.get().getId());

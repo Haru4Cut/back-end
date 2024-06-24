@@ -48,7 +48,7 @@ public class PurchaseService {
         IamportResponse<Payment> iamportResponse = iamportClient.paymentByImpUid(imp_uid);
 
         if (iamportResponse.getResponse() == null){
-            return new MessageResponse("구매에 실패하였습니다: 결제 정보를 찾을 수 없습니다.");
+            return new MessageResponse("구매에 실패하였습니다: 존재하지 않는 결제 정보");
         }
 
         BigDecimal paidAmount = iamportResponse.getResponse().getAmount();
@@ -70,29 +70,27 @@ public class PurchaseService {
         int plus = goods.getPencil();
         int total = pencils + plus;
         users.setPencils(total);
-        userRepository.save(users); //안되면 setter 써야지 머
+        userRepository.save(users);
         Purchase purchase = new Purchase(merchant_uid, users);
         purchaseRepository.save(purchase);
         users.editAuthority(UserRole.ROLE_SUBSCRIBER);
         return new MessageResponse("구매가 완료 되었습니다");
     }
 
-    private BigDecimal calculateDBAmount(Long goodsId){ // goodId를 통해 가격 받아오기
-        BigDecimal price = BigDecimal.ZERO; //값이 0인 BigDecimal 객체 생성
+    private BigDecimal calculateDBAmount(Long goodsId){
+        BigDecimal price = BigDecimal.ZERO;
         Goods goods = entityManager.find(Goods.class, goodsId);
         if (goods != null){
             return goods.getPrice();
         } else {
-            System.out.println("이거 찍히면 goods가 안불러와 지는거");
             return price;
         }
     }
 
-    private CancelData createCancelData(IamportResponse<Payment> response, int refundAmount){
-        if (refundAmount == 0){ // 전액환불만
+    private CancelData createCancelData(IamportResponse<Payment> response, int refundAmount){ // 전체 환불
+        if (refundAmount == 0){
             return new CancelData(response.getResponse().getImpUid(), true);
         }
-        //부분 환불일 경우 checksum을 입력해 준다. -> 있으니까 썼는데 솔직히 부분환불 왜 필요한지 모르겠음 + 테스트 환경에서는 부분환불 안됨
         return new CancelData(response.getResponse().getImpUid(), true, new BigDecimal(refundAmount));
     }
 }

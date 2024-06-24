@@ -25,7 +25,6 @@ public class LikesService {
     private LikesRepository likesRepository;
 
     public LikesResponseDto postLike(Long userId, LikeDto likeDto) {
-        System.out.println("url" + likeDto);
         Optional<Users> findUsers = userRepository.findById(userId);
         Events event = eventRepository.findEventsByUrl(likeDto.url);
         Optional<Events> findEvents = eventRepository.findById(event.getId());

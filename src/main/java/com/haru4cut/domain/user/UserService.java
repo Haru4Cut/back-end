@@ -7,6 +7,7 @@ import com.haru4cut.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -28,7 +29,7 @@ public class UserService implements LoginService {
 
         // 예외처리 : 중복 이메일 검사
         if (userFound.isPresent()) {
-            throw new CustomException(ErrorCode.DUPLICATE_RESOURCE);
+            throw new CustomException("중복된 이메일 입니다.", HttpStatus.CONFLICT);
         }
 
         Users users = userRepository.save(userSignUpRequestDto.toEntity());
@@ -42,7 +43,7 @@ public class UserService implements LoginService {
 
         // 예외처리 : 존재하지 않는 데이터 검사
         if (userFound.isEmpty()) {
-            throw new CustomException(ErrorCode.NOT_FOUND);
+            throw new CustomException("존재하지 않는 사용자 입니다.", HttpStatus.NOT_FOUND);
         }
 
         userRepository.delete(userFound.get());

@@ -8,6 +8,7 @@ import com.haru4cut.global.exception.CustomException;
 import com.haru4cut.global.exception.ErrorCode;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -26,10 +27,13 @@ public class LikesService {
 
     public LikesResponseDto postLike(Long userId, LikeDto likeDto) {
         Optional<Users> findUsers = userRepository.findById(userId);
+        if(findUsers.isEmpty()){
+            throw new CustomException("존재하지 않는 사용자 입니다.", HttpStatus.NOT_FOUND);
+        }
         Events event = eventRepository.findEventsByUrl(likeDto.url);
         Optional<Events> findEvents = eventRepository.findById(event.getId());
-        if(findUsers.isEmpty() || findEvents.isEmpty()){
-            throw new CustomException(ErrorCode.NOT_FOUND);
+        if(findEvents.isEmpty()){
+            throw new CustomException("존재하지 않는 그림 입니다.", HttpStatus.NOT_FOUND);
         }
         Users users = userRepository.findUserById(userId);
         Events events = eventRepository.findEventsById(findEvents.get().getId());
@@ -47,8 +51,8 @@ public class LikesService {
 
     public LikesUsersResponseDto getLikes(Long userId){
         Optional<Users> findUsers = userRepository.findById(userId);
-        if(!findUsers.isPresent()){
-            throw new CustomException(ErrorCode.NOT_FOUND);
+        if(findUsers.isEmpty()){
+            throw new CustomException("존재하지 않는 사용자 입니다.", HttpStatus.NOT_FOUND);
         }
         Users users = userRepository.findUserById(userId);
         List<Events> eventsList = eventRepository.findEventsByUsers(users);

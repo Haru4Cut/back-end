@@ -9,6 +9,7 @@ import com.haru4cut.global.exception.CustomException;
 import com.haru4cut.global.exception.ErrorCode;
 import com.haru4cut.purchase.MessageResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -32,11 +33,11 @@ public class ImageService {
         Optional<Users> users = userRepository.findById(userId);
         Users users1 = userRepository.findUserById(userId);
         if(users.isEmpty()){
-            throw new CustomException(ErrorCode.NOT_FOUND);
+            throw new CustomException("존재하지 않는 사용자 입니다.", HttpStatus.NOT_FOUND);
         }
         int pencils = users.get().getPencils();
         if (pencils <= 0){
-            throw new CustomException("연필 충전이 필요합니다!");
+            throw new CustomException("연필 충전이 필요합니다!", HttpStatus.FORBIDDEN);
         }
         String prompt = modelClient.requestPrompt(imageRequestDto);
         byte[] bytes = profileService.generatePicture(prompt);

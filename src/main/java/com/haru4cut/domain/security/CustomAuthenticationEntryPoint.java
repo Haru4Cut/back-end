@@ -18,7 +18,7 @@ import java.io.OutputStream;
 @Slf4j
 public class CustomAuthenticationEntryPoint implements org.springframework.security.web.AuthenticationEntryPoint {
 
-    private static CustomException customException = new CustomException(ErrorCode.UNAUTHORIZED);
+    private static CustomException customException = new CustomException("해당 요청에 대한 권한이 없습니다.", HttpStatus.UNAUTHORIZED);
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {

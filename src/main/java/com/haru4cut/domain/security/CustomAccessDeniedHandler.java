@@ -18,7 +18,7 @@ import java.io.OutputStream;
 @Slf4j
 public class CustomAccessDeniedHandler implements org.springframework.security.web.access.AccessDeniedHandler {
 
-    private static CustomException customException = new CustomException(ErrorCode.FORBIDDEN);
+    private static CustomException customException = new CustomException("해당 요청에 대한 권한이 없습니다", HttpStatus.FORBIDDEN);
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {

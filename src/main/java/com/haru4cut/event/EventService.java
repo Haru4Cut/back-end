@@ -15,6 +15,7 @@ import com.haru4cut.global.exception.ErrorCode;
 import lombok.AllArgsConstructor;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -48,11 +49,15 @@ public class EventService {
     // S3 링크 받아와서 출력하는 코드
     public List<String> createEvents(Long userId, List<EventRequestDto> events) throws IOException {
         List<String> eventsList = new ArrayList<>();
+        Optional<Users> user = userRepository.findById(userId);
+        if (user.isEmpty()) {
+            throw new CustomException("존재하지 않는 사용자입니다.", HttpStatus.NOT_FOUND);
+        }
         Users users = userRepository.findById(userId).get();
         int cutNum = getCutNum(events);
         int pencils = users.getPencils();
         if (pencils <= 0 || pencils < cutNum){
-            throw new CustomException("연필 충전이 필요합니다!");
+            throw new CustomException("연필 충전이 필요합니다!", HttpStatus.FORBIDDEN);
         }
 
         byte[][] base64 = getImgB64(events, users.getId());
@@ -114,7 +119,7 @@ public class EventService {
         Users users = userRepository.findUserById(userId);
         Optional<Characters> characters = characterRepository.findByUsers(users);
         if(characters.isEmpty()) {
-            throw new CustomException(ErrorCode.NOT_FOUND);
+            throw new CustomException("해당 유저의 캐릭터가 존재하지 않습니다.", HttpStatus.NOT_FOUND);
         }
         Characters characters1 = characters.get();
         ImageRequestDto imageRequestDto = new ImageRequestDto(
@@ -180,7 +185,7 @@ public class EventService {
         Optional<Diary> diary = diaryRepository.findById(diaryId);
         List<String> real_img = new ArrayList<>();
         if(diary.isEmpty()){
-            throw new CustomException(ErrorCode.NOT_FOUND);
+            throw new CustomException("존재하지 않는 일기 입니다.", HttpStatus.NOT_FOUND);
         }
         List<String> imgLinks = diary.get().getImgLinks();
         int cutNum = diary.get().getCutNum();

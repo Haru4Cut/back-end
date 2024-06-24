@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.Optional;
 
 
 @Service
@@ -63,6 +64,10 @@ public class PurchaseService {
             iamportClient.cancelPaymentByImpUid(cancelData);
 
             return new MessageResponse("지불 금액 :" + paidAmount + " db 금액 : "+ dbPrice +"구매에 실패하였습니다: 금액 불일치");
+        }
+        Optional<Users> user = userRepository.findById(userId);
+        if(user.isEmpty()){
+            throw new RuntimeException("존재하지 않는 사용자입니다.");
         }
         Users users = userRepository.findUserById(userId);
         int pencils = users.getPencils();

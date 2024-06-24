@@ -6,6 +6,7 @@ import com.haru4cut.global.exception.CustomException;
 import com.haru4cut.global.exception.ErrorCode;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,6 +22,10 @@ public class DiaryService {
     private UserRepository userRepository;
 
     public Long createDiary(Long userId, DiaryRequestDto diaryRequestDto) {
+        Optional<Users> user = userRepository.findById(userId);
+        if(user.isEmpty()) {
+            throw new CustomException("존재하지 않는 사용자입니다.", HttpStatus.NOT_FOUND);
+        }
         Users users = userRepository.findById(userId).get();
         Diary diary = diaryRepository.save(diaryRequestDto.toEntity(
                 users,
@@ -35,8 +40,8 @@ public class DiaryService {
 
     public Long updateDiary(Long diaryId, String text){
         Optional<Diary> findDiary = diaryRepository.findById(diaryId);
-        if(!findDiary.isPresent()){
-            throw new CustomException(ErrorCode.NOT_FOUND);
+        if(findDiary.isEmpty()){
+            throw new CustomException("존재하지 않는 일기입니다.", HttpStatus.NOT_FOUND);
         }
         Diary diary = findDiary.get();
         diary.update(text);
@@ -46,8 +51,8 @@ public class DiaryService {
 
     public void deleteDiary(Long diaryId) {
         Optional<Diary> findDiary = diaryRepository.findById(diaryId);
-        if(!findDiary.isPresent()){
-            throw new CustomException(ErrorCode.NOT_FOUND);
+        if(findDiary.isEmpty()){
+            throw new CustomException("존재하지 않는 일기입니다.", HttpStatus.NOT_FOUND);
         }
         diaryRepository.deleteById(diaryId);
     }
@@ -56,7 +61,7 @@ public class DiaryService {
     public DiaryResponseDto findDiaryByDiaryId(Long diaryId) {
         Optional<Diary> findDiary = diaryRepository.findById(diaryId);
         if(findDiary.isEmpty()){
-            throw new CustomException(ErrorCode.NOT_FOUND);
+            throw new CustomException("존재하지 않는 일기입니다.", HttpStatus.NOT_FOUND);
         }
         Diary diary = diaryRepository.findDiaryById(diaryId);
         return new DiaryResponseDto(diary.getId(), diary.getText(), diary.getImgLinks(), diary.getDate());
@@ -65,7 +70,7 @@ public class DiaryService {
     public List<DiaryResponseDto> findDiariesByUserId(Long userId){
         Optional<Users> user = userRepository.findById(userId);
         if(user.isEmpty()){
-            throw new CustomException(ErrorCode.NOT_FOUND);
+            throw new CustomException("존재하지 않는 사용자입니다.", HttpStatus.NOT_FOUND);
         }
         Users users = userRepository.findUserById(user.get().getId());
         List<Diary> list = diaryRepository.findDiariesByUsers(users);
@@ -77,12 +82,12 @@ public class DiaryService {
     public DiaryResponseDto findDiaryByDate(Long userId, String date){
         Optional<Users> findUser = userRepository.findById(userId);
         if (findUser.isEmpty()){
-            throw new CustomException(ErrorCode.NOT_FOUND);
+            throw new CustomException("존재하지 않는 사용자입니다.", HttpStatus.NOT_FOUND);
         }
         Users users = userRepository.findUserById(findUser.get().getId());
         Optional<Diary> findDiary = Optional.ofNullable(diaryRepository.findDiaryByUsersAndDate(users, date));
         if(findDiary.isEmpty()){
-            throw new CustomException(ErrorCode.NOT_FOUND);
+            throw new CustomException("존재하지 않는 일기입니다.", HttpStatus.NOT_FOUND);
         }
         Diary diary = diaryRepository.findDiaryByUsersAndDate(users, date);
         return new DiaryResponseDto(diary.getId(), diary.getText(), diary.getImgLinks(),diary.getDate());

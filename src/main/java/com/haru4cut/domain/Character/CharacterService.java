@@ -8,6 +8,7 @@ import com.haru4cut.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -28,7 +29,7 @@ public class CharacterService {
         try {
             user = userRepository.findById(userId).get();
         } catch (RuntimeException e) {
-            throw new CustomException(ErrorCode.NOT_FOUND);
+            throw new CustomException("존재하지 않는 사용자입니다.", HttpStatus.NOT_FOUND);
         }
         String profileUri = s3ProfileUploader.copyFile(String.valueOf(user.getId()));
 
@@ -47,7 +48,7 @@ public class CharacterService {
         Optional<Characters> characterOptional = characterRepository.findByUsers(user.get());
 
         if (characterOptional.isEmpty()) {
-            throw new CustomException(ErrorCode.NOT_FOUND);
+            throw new CustomException("존재하지 않는 캐릭터 입니다.", HttpStatus.NOT_FOUND);
         }
         String profileUri = s3ProfileUploader.copyFile(String.valueOf(userId));
         characterRequestDto.setCharacterImage(profileUri);
@@ -63,7 +64,7 @@ public class CharacterService {
 
         Optional<Characters> characterOptional = characterRepository.findByUsers(user.get());
         if (characterOptional.isEmpty()) {
-            throw new CustomException(ErrorCode.NOT_FOUND);
+            throw new CustomException("존재하지 않는 캐릭터 입니다.", HttpStatus.NOT_FOUND);
         }
 
         Characters character = characterOptional.get();
@@ -79,7 +80,7 @@ public class CharacterService {
 
         Optional<Characters> characterOptional = characterRepository.findByUsers(user.get());
         if (characterOptional.isEmpty()) {
-            throw new CustomException(ErrorCode.NOT_FOUND);
+            throw new CustomException("존재하지 않는 캐릭터 입니다.", HttpStatus.NOT_FOUND);
         }
         Characters character = characterOptional.get();
 
@@ -91,7 +92,7 @@ public class CharacterService {
         Optional<Users> user = userRepository.findById(userId);
 
         if (user.isEmpty()) {
-            throw new CustomException(ErrorCode.NOT_FOUND);
+            throw new CustomException("존재하지 않는 사용자 입니다.", HttpStatus.NOT_FOUND);
         }
 
         return user;

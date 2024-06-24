@@ -9,6 +9,7 @@ import com.haru4cut.global.exception.CustomException;
 import com.haru4cut.global.exception.ErrorCode;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -31,7 +32,7 @@ public class CommentService {
         Optional<Diary> diary = diaryRepository.findById(diaryId);
         List<Object> result = new ArrayList<>();
         if(diary.isEmpty()){
-            throw new CustomException(ErrorCode.NOT_FOUND);
+            throw new CustomException("존재하지 않는 일기 입니다.", HttpStatus.NOT_FOUND);
         }
         Diary c_diary = diaryRepository.findDiaryById(diaryId);
         int cutNum = diary.get().getCutNum();
@@ -64,12 +65,12 @@ public class CommentService {
     public CommentFlaskResponseDto getComments(Long diaryId){
         Optional<Diary> diary = diaryRepository.findById(diaryId);
         if(diary.isEmpty()){
-            throw new CustomException(ErrorCode.NOT_FOUND);
+            throw new CustomException("존재하지 않는 일기 입니다.", HttpStatus.NOT_FOUND);
         }
         Diary diary1 = diary.get();
         Optional<Comments> comments = commentRepository.findCommentsByDiary(diary1);
         if(comments.isEmpty()){
-            throw new CustomException(ErrorCode.NOT_FOUND);
+            throw new CustomException("코멘트가 존재하지 않습니다", HttpStatus.NOT_FOUND);
         }
         CommentFlaskResponseDto commentFlaskResponseDto = new CommentFlaskResponseDto(comments.get().getContents());
         return commentFlaskResponseDto;

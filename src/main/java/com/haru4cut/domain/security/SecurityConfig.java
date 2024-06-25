@@ -16,6 +16,11 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
 
 @RequiredArgsConstructor
 @Configuration
@@ -40,7 +45,7 @@ public class SecurityConfig {
 
         http
                 .csrf(AbstractHttpConfigurer::disable)          // csrf 설정
-                .cors(AbstractHttpConfigurer::disable)          // cors 설정
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))          // cors 설정
                 .httpBasic(AbstractHttpConfigurer::disable)     // 기본 로그인 사용 안함
                 .formLogin(AbstractHttpConfigurer::disable)     // 폼 비활성화
                 .logout(AbstractHttpConfigurer::disable)        // 기본 로그아웃 사용 안함
@@ -68,4 +73,20 @@ public class SecurityConfig {
 
         return http.build();
     }
+
+    // CORS 관련 설정
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowedOrigins(Arrays.asList("https://haru4cut.github.io/front-end/")); // frontend url
+        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH"));
+        config.setAllowedHeaders(Arrays.asList("*"));
+        config.setAllowCredentials(true);
+        config.setMaxAge(3600L);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+        return source;
+    }
+
 }

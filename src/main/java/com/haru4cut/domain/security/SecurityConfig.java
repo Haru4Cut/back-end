@@ -31,7 +31,8 @@ public class SecurityConfig {
         return (web) -> web
                 .ignoring()
                 .requestMatchers(new AntPathRequestMatcher("/error"))
-                .requestMatchers(new AntPathRequestMatcher("/favicon.ico"));
+                .requestMatchers(new AntPathRequestMatcher("/favicon.ico"))
+                .requestMatchers(new AntPathRequestMatcher("/"));
     }
 
     @Bean

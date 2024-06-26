@@ -1,5 +1,6 @@
 package com.haru4cut.domain.oauth2;
 
+import com.haru4cut.global.exception.CustomException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -42,14 +43,13 @@ public class OAuth2Service {
 
             RestTemplate restTemplate = new RestTemplate();
         try {
-
             ResponseEntity<Map> exchange = restTemplate.exchange(TOKEN_URI, HttpMethod.POST, httpEntity, Map.class);
             Map attributes = exchange.getBody();
             String accessToken = (String) attributes.get("access_token");
 //            String refreshToken = (String) attributes.get("refresh_token");
             return accessToken;
         } catch (Exception e) {
-            throw new ResourceAccessException("Token 획득에 실패하였습니다.");
+            throw new CustomException("토큰 획득에 실패했습니다", HttpStatus.BAD_REQUEST);
         }
     }
 

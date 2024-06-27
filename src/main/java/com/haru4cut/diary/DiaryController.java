@@ -48,9 +48,9 @@ public class DiaryController {
     }
 
     @GetMapping("/users/{userId}/diaries")
-    public ResponseEntity<DiaryResponseDto> findDiaries(@PathVariable Long userId){
+    public ResponseEntity<List<DiaryResponseDto>> findDiaries(@PathVariable Long userId){
         List<DiaryResponseDto> diaryResponseDtoList = diaryService.findDiariesByUserId(userId);
-        return new ResponseEntity(diaryResponseDtoList, HttpStatus.OK);
+        return new ResponseEntity<>(diaryResponseDtoList, HttpStatus.OK);
     }
 
     @GetMapping("/users/{userId}/diarybydate")

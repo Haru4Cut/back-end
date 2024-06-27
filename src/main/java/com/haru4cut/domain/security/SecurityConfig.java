@@ -78,7 +78,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.addAllowedOrigin("^https?:\\/\\/haru4cut\\.github\\.io\\/front\\-end$"); // front end url
+        config.addAllowedOrigin("^https?:\\/\\/haru4cut\\.github\\.io\\/front\\-end\\/$"); // front end url
         config.addAllowedHeader(CorsConfiguration.ALL);
         config.addAllowedMethod(HttpMethod.GET);
         config.addAllowedMethod(HttpMethod.POST);
@@ -91,7 +91,7 @@ public class SecurityConfig {
         config.setMaxAge(3600L);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("^https?:\\/\\/haru4cut\\.github\\.io\\/front\\-end$", config);
+        source.registerCorsConfiguration("^https?:\\/\\/haru4cut\\.github\\.io\\/front\\-end\\/$", config);
         return source;
     }
 

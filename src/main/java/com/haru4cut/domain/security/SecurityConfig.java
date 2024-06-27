@@ -78,7 +78,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.addAllowedOrigin("^https?:\\/\\/haru4cut\\.github\\.io\\/front\\-end\\/$"); // front end url
+        config.setAllowedOrigins(Arrays.asList("^https?:\\/\\/haru4cut\\.github\\.io\\/front\\-end\\/$")); // front end url
         config.addAllowedHeader(CorsConfiguration.ALL);
         config.addAllowedMethod(HttpMethod.GET);
         config.addAllowedMethod(HttpMethod.POST);

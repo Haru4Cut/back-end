@@ -21,6 +21,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Configuration
@@ -78,20 +79,14 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(Arrays.asList("^https?:\\/\\/haru4cut\\.github\\.io\\/front\\-end\\/$")); // front end url
-        config.addAllowedHeader(CorsConfiguration.ALL);
-        config.addAllowedMethod(HttpMethod.GET);
-        config.addAllowedMethod(HttpMethod.POST);
-        config.addAllowedMethod(HttpMethod.HEAD);
-        config.addAllowedMethod(HttpMethod.PUT);
-        config.addAllowedMethod(HttpMethod.DELETE);
-        config.addAllowedMethod(HttpMethod.TRACE);
-        config.addAllowedMethod(HttpMethod.OPTIONS);
+        config.setAllowedOriginPatterns(Arrays.asList("^https?:\\/\\/haru4cut\\.github\\.io\\/front\\-end\\/$")); // front end url
+        config.setAllowedHeaders(List.of("*"));
+        config.setAllowedMethods(Arrays.asList("GET", "POST", "DELETE", "PUT", "PATCH"));
         config.setAllowCredentials(true);
         config.setMaxAge(3600L);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("^https?:\\/\\/haru4cut\\.github\\.io\\/front\\-end\\/$", config);
+        source.registerCorsConfiguration("/**", config);
         return source;
     }
 

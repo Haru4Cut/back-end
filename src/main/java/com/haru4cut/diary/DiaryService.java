@@ -27,6 +27,10 @@ public class DiaryService {
             throw new CustomException("존재하지 않는 사용자입니다.", HttpStatus.NOT_FOUND);
         }
         Users users = userRepository.findById(userId).get();
+        Diary exist_diary = diaryRepository.findDiaryByUsersAndDate(users, diaryRequestDto.getDate());
+        if(exist_diary != null) {
+            throw new CustomException("오늘 이미 일기를 작성했습니다!", HttpStatus.CONFLICT);
+        }
         Diary diary = diaryRepository.save(diaryRequestDto.toEntity(
                 users,
                 diaryRequestDto.getText(),

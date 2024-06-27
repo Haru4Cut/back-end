@@ -4,10 +4,8 @@ import com.haru4cut.domain.s3.S3ProfileUploader;
 import com.haru4cut.domain.user.UserRepository;
 import com.haru4cut.domain.user.Users;
 import com.haru4cut.global.exception.CustomException;
-import com.haru4cut.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +21,7 @@ public class CharacterService {
     private final CharacterRepository characterRepository;
     private final S3ProfileUploader s3ProfileUploader;
 
-    public Long saveCharacter(Long userId, CharacterRequestDto characterRequestDto) throws IOException {
+    public Long saveCharacter(Long userId, CharacterRequestDto characterRequestDto) throws Exception {
 
         Users user;
         try {
@@ -31,6 +29,12 @@ public class CharacterService {
         } catch (RuntimeException e) {
             throw new CustomException("존재하지 않는 사용자입니다.", HttpStatus.NOT_FOUND);
         }
+
+        Optional<Characters> characterOptional = characterRepository.findByUsers(user);
+        if (characterOptional.isPresent()) {
+            throw new CustomException("이미 캐릭터가 존재합니다.", HttpStatus.BAD_REQUEST);
+        }
+
         String profileUri = s3ProfileUploader.copyFile(String.valueOf(user.getId()));
 
         Characters character = Characters.builder().sex(characterRequestDto.getSex()).age(characterRequestDto.getAge()).hairColor(characterRequestDto.getHairColor())

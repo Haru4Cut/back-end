@@ -20,10 +20,11 @@ public class DiaryController {
     private final DiaryService diaryService;
 
     @PostMapping("/diaries/{userId}")
-    public ResponseEntity<Long> createDiary(@PathVariable Long userId,
+    public ResponseEntity<DiaryResponseDto> createDiary(@PathVariable Long userId,
                                             @RequestBody DiaryRequestDto diaryRequestDto){
         Long diaryId = diaryService.createDiary(userId,diaryRequestDto);
-        return new ResponseEntity(new DiaryResponseDto(diaryId, diaryRequestDto.getText(), diaryRequestDto.getImgLinks(), diaryRequestDto.getDate()), HttpStatus.CREATED);
+        DiaryResponseDto diaryResponseDto = new DiaryResponseDto(diaryId, diaryRequestDto.getText(), diaryRequestDto.getImgLinks(), diaryRequestDto.getDate());
+        return new ResponseEntity<>(diaryResponseDto, HttpStatus.CREATED);
     }
 
     @PatchMapping("/diaries/{diaryId}")
@@ -47,9 +48,9 @@ public class DiaryController {
     }
 
     @GetMapping("/users/{userId}/diaries")
-    public ResponseEntity<DiaryResponseDto> findDiaries(@PathVariable Long userId){
+    public ResponseEntity<List<DiaryResponseDto>> findDiaries(@PathVariable Long userId){
         List<DiaryResponseDto> diaryResponseDtoList = diaryService.findDiariesByUserId(userId);
-        return new ResponseEntity(diaryResponseDtoList, HttpStatus.OK);
+        return new ResponseEntity<>(diaryResponseDtoList, HttpStatus.OK);
     }
 
     @GetMapping("/users/{userId}/diarybydate")

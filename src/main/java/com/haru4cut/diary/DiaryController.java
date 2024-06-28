@@ -1,6 +1,7 @@
 package com.haru4cut.diary;
 
 import com.haru4cut.domain.user.Users;
+import com.haru4cut.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +23,14 @@ public class DiaryController {
     @PostMapping("/diaries/{userId}")
     public ResponseEntity<DiaryResponseDto> createDiary(@PathVariable Long userId,
                                             @RequestBody DiaryRequestDto diaryRequestDto){
-        Long diaryId = diaryService.createDiary(userId,diaryRequestDto);
-        DiaryResponseDto diaryResponseDto = new DiaryResponseDto(diaryId, diaryRequestDto.getText(), diaryRequestDto.getImgLinks(), diaryRequestDto.getDate());
-        return new ResponseEntity<>(diaryResponseDto, HttpStatus.CREATED);
+        try {
+            Long diaryId = diaryService.createDiary(userId, diaryRequestDto);
+            DiaryResponseDto diaryResponseDto = new DiaryResponseDto(diaryId, diaryRequestDto.getText(), diaryRequestDto.getImgLinks(), diaryRequestDto.getDate());
+            return new ResponseEntity<>(diaryResponseDto, HttpStatus.CREATED);
+        } catch (CustomException e){
+            log.error(e);
+            return new ResponseEntity<>(null, HttpStatus.CONFLICT);
+        }
     }
 
     @PatchMapping("/diaries/{diaryId}")

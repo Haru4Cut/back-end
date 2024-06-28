@@ -16,7 +16,7 @@ public class DiaryRequestDto {
     String date;
 
     public Diary toEntity(Users users, String text, List<String> imgLinks, int cutNum, String date){
-        return new Diary(users, this.cutNum, this.imgLinks, this.text, this.date);
+        return new Diary(users, cutNum, imgLinks, text, date);
     }
 
 }

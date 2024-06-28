@@ -17,6 +17,7 @@ import java.util.Optional;
 @Log4j2
 @RequiredArgsConstructor
 public class DiaryController {
+
     @Autowired
     private final DiaryService diaryService;
 

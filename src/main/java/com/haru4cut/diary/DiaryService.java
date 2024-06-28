@@ -26,9 +26,9 @@ public class DiaryService {
         if(user.isEmpty()) {
             throw new CustomException("존재하지 않는 사용자입니다.", HttpStatus.NOT_FOUND);
         }
-        Users users = userRepository.findById(userId).get();
-        Diary exist_diary = diaryRepository.findDiaryByUsersAndDate(users, diaryRequestDto.getDate());
-        if(exist_diary != null) {
+        Users users = userRepository.findUserById(user.get().getId());
+        Optional<Diary> exist_diary = diaryRepository.findDiaryByUsersAndDate(users, diaryRequestDto.getDate());
+        if(exist_diary.isPresent()) {
             throw new CustomException("오늘 이미 일기를 작성했습니다!", HttpStatus.CONFLICT);
         }
         Diary diary = diaryRepository.save(diaryRequestDto.toEntity(
@@ -89,11 +89,11 @@ public class DiaryService {
             throw new CustomException("존재하지 않는 사용자입니다.", HttpStatus.NOT_FOUND);
         }
         Users users = userRepository.findUserById(findUser.get().getId());
-        Optional<Diary> findDiary = Optional.ofNullable(diaryRepository.findDiaryByUsersAndDate(users, date));
+        Optional<Diary> findDiary = diaryRepository.findDiaryByUsersAndDate(users, date);
         if(findDiary.isEmpty()){
             throw new CustomException("존재하지 않는 일기입니다.", HttpStatus.NOT_FOUND);
         }
-        Diary diary = diaryRepository.findDiaryByUsersAndDate(users, date);
+        Diary diary = diaryRepository.findDiaryById(findDiary.get().getId());
         return new DiaryResponseDto(diary.getId(), diary.getText(), diary.getImgLinks(),diary.getDate());
 
     }

@@ -22,9 +22,14 @@ public class DiaryController {
     @PostMapping("/diaries/{userId}")
     public ResponseEntity<DiaryResponseDto> createDiary(@PathVariable Long userId,
                                             @RequestBody DiaryRequestDto diaryRequestDto){
-        Long diaryId = diaryService.createDiary(userId,diaryRequestDto);
-        DiaryResponseDto diaryResponseDto = new DiaryResponseDto(diaryId, diaryRequestDto.getText(), diaryRequestDto.getImgLinks(), diaryRequestDto.getDate());
-        return new ResponseEntity<>(diaryResponseDto, HttpStatus.CREATED);
+        try {
+            Long diaryId = diaryService.createDiary(userId, diaryRequestDto);
+            DiaryResponseDto diaryResponseDto = new DiaryResponseDto(diaryId, diaryRequestDto.getText(), diaryRequestDto.getImgLinks(), diaryRequestDto.getDate());
+            return new ResponseEntity<>(diaryResponseDto, HttpStatus.CREATED);
+        } catch (CustomException e){
+            log.error(e);
+            return new ResponseEntity<>(null, HttpStatus.CONFLICT);
+        }
     }
 
     @PatchMapping("/diaries/{diaryId}")

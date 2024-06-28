@@ -1,6 +1,7 @@
 package com.haru4cut.diary;
 
 import com.haru4cut.domain.user.Users;
+import com.haru4cut.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import java.util.Optional;
 @Log4j2
 @RequiredArgsConstructor
 public class DiaryController {
+
     @Autowired
     private final DiaryService diaryService;
 
